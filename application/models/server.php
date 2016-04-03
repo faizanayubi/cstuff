@@ -3,10 +3,8 @@
 /**
  * @author Faizan Ayubi
  */
-use Framework\Registry as Registry;
-
 namespace Models;
-class Billing extends Shared\Model {
+class Server extends Shared\Model {
 
     /**
      * @column
@@ -22,43 +20,34 @@ class Billing extends Shared\Model {
      * @type integer
      * @index
      */
-    protected $_organization_id;
-
-    /**
-     * @column
-     * @readwrite
-     * @type integer
-     * @index
-     */
     protected $_item_id;
 
     /**
      * @column
      * @readwrite
+     * @type text
+     */
+    protected $_os;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * @length 255
+     *
+     * @label server login user
+     */
+    protected $_user;
+
+
+    /**
+     * @column
+     * @readwrite
      * @type decimal
-     * @length 10,2
+     * @length 255
+     *
+     * @label server login pass
      */
-    protected $_amount;
-
-    /**
-     * @column
-     * @readwrite
-     * @type integer
-     */
-    protected $_period;
-
-    /**
-     * @column
-     * @readwrite
-     * @type date
-     */
-    protected $_start;
-
-    /**
-     * @column
-     * @readwrite
-     * @type date
-     */
-    protected $_end;
+    protected $_pass;
 
 }

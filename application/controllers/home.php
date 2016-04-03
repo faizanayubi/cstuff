@@ -12,4 +12,10 @@ class Home extends Controller {
     	$layoutView->set("seo", Framework\Registry::get("seo"));
     }
 
+
+    public function cart($item_id) {
+    	$layoutView = $this->getLayoutView();
+    	$layoutView->set("seo", Framework\Registry::get("seo"));
+    }
+
 }

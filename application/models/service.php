@@ -3,10 +3,8 @@
 /**
  * @author Faizan Ayubi
  */
-use Framework\Registry as Registry;
-
 namespace Models;
-class Item extends Shared\Model {
+class Service extends Shared\Model {
 
     /**
      * @column
@@ -19,38 +17,20 @@ class Item extends Shared\Model {
     /**
      * @column
      * @readwrite
-     * @type text
-     * @length 255
+     * @type integer
+     * @index
+     */
+    protected $_item_id;
+
+    /**
+     * @column
+     * @readwrite
+     * @type integer
      *
      * @validate required
-     * @label plan
+     * @label billing period
      */
-    protected $_plan;
-
-    /**
-     * @column
-     * @readwrite
-     * @type text
-     * @length 255
-     * 
-     * @validate required
-     * @label processor
-     */
-    protected $_processor;
-
-    /**
-     * @column
-     * @readwrite
-     * @type text
-     */
-    protected $_ram;
-
-    /**
-     * @column
-     * @readwrite
-     * @type text
-     */
-    protected $_disk;
+    protected $_period;
 
     /**
      * @column
@@ -62,4 +42,26 @@ class Item extends Shared\Model {
      * @label price
      */
     protected $_price;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * @length 255
+     *
+     * @validate required
+     * @label type
+     */
+    protected $_type;
+
+
+    /**
+     * @column
+     * @readwrite
+     * @type date
+     *
+     * @validate required
+     * @label next renewal
+     */
+    protected $_renewal;
 }
