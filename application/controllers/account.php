@@ -3,9 +3,9 @@
 /**
  * @author Faizan Ayubi, Hemant Mann
  */
-use Framework\Controller as Controller;
+use Shared\Controller as Controller;
 
-class Home extends Controller {
+class Account extends Controller {
 
     public function index() {
     	$layoutView = $this->getLayoutView();
