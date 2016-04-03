@@ -179,39 +179,41 @@
         </div>
         <div class="row">
             <div class="col-md-12 col-sm-12">
-                <table class="table table-responsive">
-                    <thead>
-                        <tr>
-                            <td>Processor</td>
-                            <td>RAM</td>
-                            <td>HDD</td>
-                            <td>Included</td>
-                            <td>Price</td>
-                            <td></td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {foreach $item in $items}
-                        <tr>
-                            <td>
-                                <strong>{echo $item->plan}</strong><br>
-                                {echo $item->processor}
-                            </td>
-                            <td>{echo $item->ram}</td>
-                            <td>{echo $item->disk}</td>
-                            <td>
-                                {echo $item->bandwidth} <br>
-                                {echo $item->ips}
-                            </td>
-                            <td>INR {echo $item->price}/month</td>
-                            <td>
-                                <a href="/cart/{echo $item->id}.html" class="btn btn-primary btn-xs">Order Now!</a><br>
-                                <strong>FREE Setup</strong>
-                            </td>
-                        </tr>
-                    {/foreach}
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <td>Processor</td>
+                                <td>RAM</td>
+                                <td>HDD</td>
+                                <td>Included</td>
+                                <td>Price</td>
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $item in $items}
+                            <tr>
+                                <td>
+                                    <strong>{echo $item->plan}</strong><br>
+                                    {echo $item->processor}
+                                </td>
+                                <td>{echo $item->ram}</td>
+                                <td>{echo $item->disk}</td>
+                                <td>
+                                    {echo $item->bandwidth} <br>
+                                    {echo $item->ips}
+                                </td>
+                                <td>INR {echo $item->price}/month</td>
+                                <td>
+                                    <a href="/cart/{echo $item->id}.html" class="btn btn-primary btn-xs">Order Now!</a><br>
+                                    <strong>FREE Setup</strong>
+                                </td>
+                            </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -322,10 +324,8 @@
         <div class="row text-center">
             <div class="col-md-12">
                 <ul>
-                    <li><img src="{echo CDN}images/client/1.png" alt="client" /></li>
-                    <li><img src="{echo CDN}images/client/2.png" alt="client" /></li>
-                    <li><img src="{echo CDN}images/client/3.png" alt="client" /></li>
-                    <li><img src="{echo CDN}images/client/4.png" alt="client" /></li>
+                    <li><img src="{echo CDN}images/client/titus.jpg" alt="client" /></li>
+                    <li><img src="{echo CDN}images/client/filmy.jpg" alt="client" /></li>
                 </ul>
             </div>
         </div>
