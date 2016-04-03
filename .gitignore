@@ -1,2 +1,5 @@
-
+# config-file
 application/configuration/database.ini
+
+# logs
+logs/
