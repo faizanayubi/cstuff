@@ -25,7 +25,7 @@ class Controller extends \Framework\Controller {
             $property = "set" . ucfirst($key);
             $seo->$property($value);
         }
-        $params["view"]->set("seo", $seo);
+        $this->layoutView->set("seo", $seo);
     }
 
     public function noview() {

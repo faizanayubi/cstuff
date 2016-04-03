@@ -6,7 +6,7 @@
 use Framework\Registry as Registry;
 
 namespace Models;
-class Invoice extends Shared\Model {
+class Invoice extends \Shared\Model {
 
     /**
      * @column
@@ -14,23 +14,7 @@ class Invoice extends Shared\Model {
      * @type integer
      * @index
      */
-    protected $_organization_id;
-
-    /**
-     * @column
-     * @readwrite
-     * @type integer
-     * @index
-     */
-    protected $_item_id;
-
-    /**
-     * @column
-     * @readwrite
-     * @type integer
-     * @index
-     */
-    protected $_billing_id;
+    protected $_user_id;
 
     /**
      * @column
@@ -43,7 +27,19 @@ class Invoice extends Shared\Model {
     /**
      * @column
      * @readwrite
-     * @type integer
+     * @type date
+     *
+     * @validate required
      */
-    protected $_mode;
+    protected $_duedate;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * @length 255
+     *
+     * @label reference of paid
+     */
+    protected $_ref;
 }

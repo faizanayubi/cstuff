@@ -4,7 +4,7 @@
  * @author Faizan Ayubi
  */
 namespace Models;
-class Server extends Shared\Model {
+class Server extends \Shared\Model {
 
     /**
      * @column
@@ -26,6 +26,9 @@ class Server extends Shared\Model {
      * @column
      * @readwrite
      * @type text
+     * @length 255
+     *
+     * @label operating system
      */
     protected $_os;
 
@@ -43,7 +46,7 @@ class Server extends Shared\Model {
     /**
      * @column
      * @readwrite
-     * @type decimal
+     * @type text
      * @length 255
      *
      * @label server login pass

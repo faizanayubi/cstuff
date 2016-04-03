@@ -6,7 +6,7 @@
 use Framework\Registry as Registry;
 
 namespace Models;
-class IP extends Shared\Model {
+class IP extends \Shared\Model {
 
     /**
      * @column

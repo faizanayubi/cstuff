@@ -191,23 +191,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr onclick="document.location='https://www..net/cart/?id=250';">
+                    {foreach $item in $items}
+                        <tr>
                             <td>
-                                <div class="floatl" style="margin-left:10px;">
-                                    <strong>Intel Core2Duo Preconfigured</strong><br>
-                                    1.6GHz or faster - 1 processor<br>2 Cores / 2 Threads <br>
-                                </div>
+                                <strong>{echo $item->plan}</strong><br>
+                                {echo $item->processor}
                             </td>
-                            <td class="textcenter">4GB DDR2 </td>
-                            <td class="textcenter">250GB SATA </td>
+                            <td>{echo $item->ram}</td>
+                            <td>{echo $item->disk}</td>
                             <td>
-                                100mbit Unmetered <br>
-                                1 usable IPv4 Address <br>
-                                /64 IPv6 Address Block
+                                {echo $item->bandwidth} <br>
+                                {echo $item->ips}
                             </td>
-                            <td class="textcenter">$10.00/month</td>
-                            <td class="textcenter"><input type="button" class="button" value="Order Now!" style="background-color: #D91F20;" onclick="document.location='https://www..net/cart/?id=250';"><br><strong>FREE Setup</strong></td>
+                            <td>INR {echo $item->price}/month</td>
+                            <td>
+                                <a href="" class="button blue go-form">Get Started Now!</a><br>
+                                <strong>FREE Setup</strong>
+                            </td>
                         </tr>
+                    {/foreach}
                     </tbody>
                 </table>
             </div>

@@ -4,7 +4,7 @@
  * @author Faizan Ayubi
  */
 namespace Models;
-class User extends Shared\Model {
+class User extends \Shared\Model {
 
     /**
      * @column

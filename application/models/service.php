@@ -4,7 +4,7 @@
  * @author Faizan Ayubi
  */
 namespace Models;
-class Service extends Shared\Model {
+class Service extends \Shared\Model {
 
     /**
      * @column

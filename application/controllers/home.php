@@ -3,19 +3,24 @@
 /**
  * @author Faizan Ayubi, Hemant Mann
  */
-use Framework\Controller as Controller;
+use Shared\Controller as Controller;
+use Framework\RequestMethods as RequestMethods;
+use Framework\Registry as Registry;
 
 class Home extends Controller {
 
     public function index() {
-    	$layoutView = $this->getLayoutView();
-    	$layoutView->set("seo", Framework\Registry::get("seo"));
+    	$this->getLayoutView()->set("seo", Framework\Registry::get("seo"));
+    	$view = $this->getActionView();
+
+    	$items = Item::all(array("live = ?" => true));
+    	$view->set("items", $items);
     }
 
 
     public function cart($item_id) {
-    	$layoutView = $this->getLayoutView();
-    	$layoutView->set("seo", Framework\Registry::get("seo"));
+		$this->seo(array("title" => "Cart"));
+		$view = $this->getActionView();
     }
 
 }

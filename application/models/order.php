@@ -6,7 +6,7 @@
 use Framework\Registry as Registry;
 
 namespace Models;
-class Order extends Shared\Model {
+class Order extends \Shared\Model {
 
     /**
      * @column

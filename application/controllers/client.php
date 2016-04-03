@@ -3,37 +3,38 @@
 /**
  * @author Faizan Ayubi, Hemant Mann
  */
-use Shared\Controller as Controller;
+use Framework\RequestMethods as RequestMethods;
+use Framework\Registry as Registry;
 
-class Client extends Controller {
+class Client extends Auth {
 
     public function index() {
-    	$layoutView = $this->getLayoutView();
-    	$layoutView->set("seo", Framework\Registry::get("seo"));
+    	$this->seo(array("title" => "Main"));
+        $view = $this->getActionView();
     }
 
     public function services() {
-    	$layoutView = $this->getLayoutView();
-    	$layoutView->set("seo", Framework\Registry::get("seo"));
+    	$this->seo(array("title" => "Services"));
+        $view = $this->getActionView();
     }
 
     public function account() {
-    	$layoutView = $this->getLayoutView();
-    	$layoutView->set("seo", Framework\Registry::get("seo"));
+    	$this->seo(array("title" => "Account"));
+        $view = $this->getActionView();
     }
 
     public function tickets() {
-    	$layoutView = $this->getLayoutView();
-    	$layoutView->set("seo", Framework\Registry::get("seo"));
+    	$this->seo(array("title" => "Tickets"));
+        $view = $this->getActionView();
     }
 
     public function invoices() {
-    	$layoutView = $this->getLayoutView();
-    	$layoutView->set("seo", Framework\Registry::get("seo"));
+    	$this->seo(array("title" => "Invoices"));
+        $view = $this->getActionView();
     }
 
     public function orders() {
-    	$layoutView = $this->getLayoutView();
-    	$layoutView->set("seo", Framework\Registry::get("seo"));
+    	$this->seo(array("title" => "Orders"));
+        $view = $this->getActionView();
     }
 }

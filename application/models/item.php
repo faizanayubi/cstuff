@@ -6,7 +6,7 @@
 use Framework\Registry as Registry;
 
 namespace Models;
-class Item extends Shared\Model {
+class Item extends \Shared\Model {
 
     /**
      * @column
@@ -42,6 +42,10 @@ class Item extends Shared\Model {
      * @column
      * @readwrite
      * @type text
+     * @length 255
+     *
+     * @validate required
+     * @label server ram
      */
     protected $_ram;
 
@@ -49,8 +53,34 @@ class Item extends Shared\Model {
      * @column
      * @readwrite
      * @type text
+     * @length 255
+     *
+     * @validate required
+     * @label hard disk
      */
     protected $_disk;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * @length 255
+     *
+     * @validate required
+     * @label bandwidth
+     */
+    protected $_bandwidth;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * @length 255
+     *
+     * @validate required
+     * @label ips
+     */
+    protected $_ips;
 
     /**
      * @column
