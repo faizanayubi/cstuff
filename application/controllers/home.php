@@ -13,7 +13,7 @@ class Home extends Controller {
     	$this->getLayoutView()->set("seo", Framework\Registry::get("seo"));
     	$view = $this->getActionView();
 
-    	$items = Item::all(array("live = ?" => true));
+    	$items = Models\Item::all(array("live = ?" => true));
     	$view->set("items", $items);
     }
 
@@ -21,6 +21,12 @@ class Home extends Controller {
     public function cart($item_id) {
 		$this->seo(array("title" => "Cart"));
 		$view = $this->getActionView();
+
+        $item = Models\Item::first(array("live = ?" => true));
+        if (!$item) {
+            $this->redirect("/index.html");
+        }
+        $view->set("item", $item);
     }
 
 }

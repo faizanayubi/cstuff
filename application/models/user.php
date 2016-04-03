@@ -44,16 +44,6 @@ class User extends \Shared\Model {
      * @column
      * @readwrite
      * @type text
-     * @length 255
-     * 
-     * @label organization
-     */
-    protected $_organization;
-
-    /**
-     * @column
-     * @readwrite
-     * @type text
      * @length 100
      * @index
      * 
