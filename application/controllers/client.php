@@ -86,16 +86,16 @@ class Client extends Auth {
     	$this->seo(array("title" => "Account"));
         $view = $this->getActionView();
 
-        $user = $this->user;
+        $user = $this->user; $org = $this->organization;
         $user_fields = $user->render(["name", "phone"]);
-        $org = $this->organization;
         $org_fields = $org->render(["name", "address", "city", "postalcode", "country"]);
 
         $view->set("u_fields", $user_fields)
             ->set("org_fields", $org_fields)
             ->set("errors", []);
 
-        if (RequestMethods::post("action") == "update") {
+        $action = RequestMethods::post("action");
+        if ($action == "userUpdate") {
             foreach ($user_fields as $key => $value) {
                 $user->$key = RequestMethods::post($key);
             }
@@ -106,7 +106,10 @@ class Client extends Auth {
                 $view->set("errors", $user->errors);
                 return;
             }
+            $view->set("message", "Basic info updated!!");
+        }
 
+        if ($action == "orgUpdate") {
             foreach ($org_fields as $key => $value) {
                 $org->$key = RequestMethods::post($key);
             }
@@ -118,8 +121,7 @@ class Client extends Auth {
                 $view->set("errors", $org->errors);
                 return;
             }
-
-            $view->set("success", "Account info updated!!");
+            $view->set("message", "Account info updated!!");
         }
     }
 

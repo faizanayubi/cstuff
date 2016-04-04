@@ -394,7 +394,7 @@ namespace Framework {
         }
 
         protected function _validateAlpha($value) {
-            return StringMethods::match($value, "#^([a-zA-Z]+)$#");
+            return StringMethods::match($value, "#^([a-zA-Z\s]+)$#");
         }
 
         protected function _validateNumeric($value) {

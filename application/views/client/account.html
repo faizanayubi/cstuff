@@ -1,0 +1,61 @@
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="content">
+                    <div class="page-title">
+                        <h3 class="">Your Account</h3>
+                    </div>
+                    {if isset($message)}
+                    <div class="alert alert-info alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        {echo $message}
+                    </div>
+                    {/if}
+                    <form class="panel well" action="" method="post">
+                        <h4 class="page-title">
+                            Basic Information
+                            <button type="submit" class="btn btn-primary btn-xs pull-right">Save</button>
+                        </h4>
+                        <div class="row">
+                            {foreach $f in $u_fields}
+                            <div class="form-group col-sm-6">
+                                <label>{echo $f['placeholder']}</label>
+                                <input type="{echo $f['type']}" {echo $f['html'] . ' ' . $f['pattern']} class="form-control" value="{echo $user->$f['name']}" name="{echo $f['name']}">
+                                {echo Shared\Markup::errors($errors, $f['name'])}
+                            </div>
+                            {/foreach}
+
+                            <div class="form-group col-sm-6">
+                                <label for="Email">Email</label>
+                                <input disabled="" type="text" class="form-control" value="{echo $user->email}">
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="password">Password</label>
+                                <input disabled="" type="password" class="form-control" value="***">
+                            </div>
+                        </div>
+                        <input type="hidden" name="action" value="userUpdate">
+                    </form>
+
+                    <form class="panel well" action="" method="post">
+                        <h4 class="page-title">
+                            Account Info
+                            <button type="submit" class="btn btn-primary btn-xs pull-right">Save</button>
+                        </h4>
+                        <div class="row">
+                            {foreach $f in $org_fields}
+                            <div class="form-group col-sm-6">
+                                <label>{echo $f['placeholder']}</label>
+                                <input type="{echo $f['type']}" {echo $f['html'] . ' ' . $f['pattern']} class="form-control" value="{echo $organization->$f['name']}" name="{echo $f['name']}">
+                                {echo Shared\Markup::errors($errors, $f['name'])}
+                            </div>
+                            {/foreach}
+                        <input type="hidden" name="action" value="orgUpdate">
+                    </form>
+                </div>
+                <!-- /.content -->
+            </div>
+        </div>
+    </div>
+</div>
