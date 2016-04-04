@@ -2,6 +2,39 @@
     <div class="container-fluid">
         <div class="row">
             <h1>Orders</h1>
+
+            <div class="table-responsive">
+                <table class="table table-striped text-center table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Service Id</th>
+                            <th>Service Name</th>
+                            <th>Updated</th>
+                            <th>Cost</th>
+                            <th>Paid</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $o in $orders}
+                        	<tr>
+                        		<td>#{echo $o->service_id}</td>
+                        		<td>{echo $o->name}</td>
+                        		<td>{echo Framework\StringMethods::datetime_to_text($o->updated)}</td>
+                        		<td>{echo $o->price}</td>
+                        		<td>{}</td>
+                        		<td>
+                        		{if $o->live}
+                        		<span class="label label-success"> Completed</span>
+                        		{/if} {else}
+                        		<span class="label label-warning"> Incompleted</span>
+                        		{/else}
+                        		</td>
+                        	</tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

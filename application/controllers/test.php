@@ -13,6 +13,7 @@ class Test extends \Auth {
 	public function index() {
 		$this->noview();
 
+		$this->log("Items cron started");
 		$bot = new Bot([
 			'cloud' => 'https://www.wholesaleinternet.net/dedicated/'
 		]);
@@ -45,6 +46,7 @@ class Test extends \Auth {
 				$item->save();
 			}
 		}
+		$this->log("Items cron ended");
 	}
 
 	protected function _price($price) {

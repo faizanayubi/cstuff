@@ -156,7 +156,7 @@ class Client extends Auth {
     }
 
     protected function _orders() {
-        $orders = Models\Order::all(["user_id = ?" => $this->user->id], ["id", "service_id", "live"]);
+        $orders = Models\Order::all(["user_id = ?" => $this->user->id], ["id", "service_id", "modified", "live"]);
         $services = $this->_services();
 
         $results = [];
@@ -165,7 +165,9 @@ class Client extends Auth {
             unset($s->id); unset($s->live);
             $d = [
                 "id" => $o->id,
-                "live" => $o->live
+                "live" => $o->live,
+                "service_id" => $o->service_id,
+                "updated" => $o->updated
             ];
             $results[$o->id] = (object) array_merge($d, (array) $s);
         }
