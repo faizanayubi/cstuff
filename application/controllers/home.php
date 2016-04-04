@@ -73,7 +73,8 @@ class Home extends Controller {
                     $organization->save();
 
                     $this->_server($user, $item);
-                    $this->_pay($user, $item);
+                    $url = $this->_pay($user, $item);
+                    $this->redirect($url);
                 }
             } else {
                 $organization = Models\Organization::first(array("user_id = ?" => $user->id));
