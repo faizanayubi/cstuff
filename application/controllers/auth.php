@@ -8,6 +8,7 @@ use Shared\Controller as Controller;
 use Framework\RequestMethods as RequestMethods;
 use Framework\Registry as Registry;
 use \Curl\Curl;
+use Models\User as User;
 
 class Auth extends Controller {
     /**
@@ -23,11 +24,19 @@ class Auth extends Controller {
     /**
      * @protected
      */
+    public function _secure() {
+        if (!$this->user) {
+            $this->redirect("/404");
+        }
+    }
+
+    /**
+     * @protected
+     */
     public function _session() {
         $user = $this->getUser();
         if ($user) {
-            header("Location: /profile.html");
-            exit();
+            $this->redirect("/client");
         }
     }
     
@@ -51,7 +60,7 @@ class Auth extends Controller {
 
     public function logout() {
         session_destroy();
-        $this->redirect("/index.html");
+        $this->redirect("/");
     }
 
     protected function _server($user, $item) {
@@ -132,21 +141,35 @@ class Auth extends Controller {
      * @before _session
      */
     public function login() {
-        $this->seo(array("title" => "Login", "view" => $this->getLayoutView()));
-        $view = $this->getActionView();
-        $fb = RequestMethods::get("fb", false);
+        $this->seo(array("title" => "Login"));
+        $view = $this->getActionView(); $session = Registry::get("session");
+
         if (RequestMethods::post("action") == "login") {
-            $message =  $this->_login();
-            $view->set("message", $message);
+            $email = RequestMethods::post("email");
+            $pass = RequestMethods::post("password");
+
+            $user = User::first(["email = ?" => $email, "live = ?" => true]);
+            if (!$user) {
+                $view->set("message", 'Invalid email/password');
+                return;
+            }
+            if (sha1($pass) === (string) $user->password) {
+                $this->setUser($user);
+                $org = Models\Organization::first(["user_id = ?" => $this->user->id]);
+                $session->set("organization", $org);
+                $this->redirect("/client");
+            } else {
+                $view->set("message", 'Invalid email/password');
+                return;
+            }
         }
-        $view->set("fb", $fb);
     }
 
     /**
      * @before _session
      */
     public function forgotpassword() {
-        $this->seo(array("title" => "Forgot Password", "view" => $this->getLayoutView()));
+        $this->seo(array("title" => "Forgot Password"));
         $view = $this->getActionView();
 
         if (RequestMethods::post("action") == "reset" && $this->reCaptcha()) {
@@ -159,7 +182,7 @@ class Auth extends Controller {
      * @before _session
      */
     public function resetpassword($token) {
-        $this->seo(array("title" => "Forgot Password", "view" => $this->getLayoutView()));
+        $this->seo(array("title" => "Forgot Password"));
         $view = $this->getActionView();
 
         $meta = Meta::first(array("value = ?" => $token, "property = ?" => "resetpass"));
@@ -177,24 +200,6 @@ class Auth extends Controller {
             } else{
                 $view->set("message", 'Password Does not match');
             }
-        }
-    }
-
-    protected function _login() {
-        $exist = User::first(array("email = ?" => RequestMethods::post("email")));
-        if($exist) {
-            if($exist->password == sha1(RequestMethods::post("password"))) {
-                if ($exist->live) {
-                    return $this->authorize($exist);
-                } else {
-                    return "User account not verified";
-                }
-            } else{
-                return 'Wrong Password, Try again or <a href="/auth/forgotpassword.html">Reset Password</a>';
-            }
-            
-        } else {
-            return 'User doesnot exist. Please signup <a href="/publisher/register.html">here</a>';
         }
     }
 

@@ -58,10 +58,13 @@ namespace Shared {
          * Renders the form fields for different properties of a model
          * with validations and type which can be looped through in the views
          */
-        public function render() {
-            $fields = array();
+        public function render($f = []) {
+            $fields = array(); $count = count($f);
             foreach ($this->columns as $column) {
                 if (!$column["label"]) {
+                    continue;
+                }
+                if ($count != 0 && !in_array($column["name"], $f)) {
                     continue;
                 }
 

@@ -21,7 +21,7 @@ class Organization extends \Shared\Model {
      * @length 255
      * 
      * @validate required, alpha, min(3), max(255)
-     * @label name
+     * @label Name
      */
     protected $_name;
 
@@ -32,7 +32,7 @@ class Organization extends \Shared\Model {
      * @length 255
      *
      * @validate required
-     * @label address
+     * @label Address
      */
     protected $_address;
 
@@ -43,7 +43,7 @@ class Organization extends \Shared\Model {
      * @length 255
      *
      * @validate required
-     * @label city
+     * @label City
      */
     protected $_city;
 
@@ -54,7 +54,7 @@ class Organization extends \Shared\Model {
      * @length 100
      * 
      * @validate required
-     * @label postal code
+     * @label Postal Code
      */
     protected $_postalcode;
 
@@ -65,7 +65,7 @@ class Organization extends \Shared\Model {
      * @length 2
      * 
      * @validate required
-     * @label country
+     * @label Country
      */
     protected $_country;
 }
