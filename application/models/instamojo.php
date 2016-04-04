@@ -1,11 +1,10 @@
 <?php
 
 /**
- * Description of instamojo
- *
  * @author Faizan Ayubi
  */
-class Instamojo extends Shared\Model {
+namespace Models;
+class Instamojo extends \Shared\Model {
     
     /**
      * @column

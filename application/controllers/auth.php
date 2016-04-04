@@ -205,7 +205,7 @@ class Auth extends Controller {
         if ($organization) {
             $this->setUser($user);
             $session->set("organization", $organization);
-            $this->redirect("/publisher/index.html");
+            $this->redirect("/client/index.html");
         }
     }
 
