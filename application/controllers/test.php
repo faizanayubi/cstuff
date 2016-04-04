@@ -5,8 +5,11 @@ use \WebBot\lib\WebBot\Bot as Bot;
 /**
  * Class to scrape types of VPS provided
  */
-class Test extends Shared\Controller {
-
+class Test extends \Auth {
+	
+	/**
+	 * @before _secure
+	 */
 	public function index() {
 		$this->noview();
 
@@ -22,14 +25,36 @@ class Test extends Shared\Controller {
 			if ($c->getAttribute('onclick')) { // tr
 				$ch = $c->childNodes;
 				$result = $this->_process($ch);
+				$result['price'] = $this->_price($result['price']);
 				
-				$item = Models\Item::first(["plan = ?" => $result['plan'], "user_id = ?" => $this->user->id]);
+				$item = Models\Item::first([
+					"plan = ?" => $result['plan'],
+					"processor = ?" => $result['processor'],
+					"ram = ?" => $result['ram'],
+					"disk = ?" => $result['disk'],
+					"user_id = ?" => 1
+				]);
 				if (!$item) {
-					$item = new Models\Item(array_merge($result, ['user_id' => $this->user->id]));
+					$item = new Models\Item(array_merge($result, ['user_id' => 1]));
+				} else {
+					$item->price = $result['price'];
+					$item->ips = $result['ips'];
+					$item->bandwidth = $result['bandwidth'];
 				}
 				$item->live = $result['live'];
 				$item->save();
 			}
+		}
+	}
+
+	protected function _price($price) {
+		preg_match("/([0-9]+\.?[0-9]+)/", $price, $matches);
+		if (isset($matches[1])) {
+			$num = 67 * $matches[1];
+			$num *= 3;
+			return $num;
+		} else {
+			throw new \Exception("Invalid price");
 		}
 	}
 
@@ -41,8 +66,9 @@ class Test extends Shared\Controller {
 		$result = []; $keys = ['plan', 'processor', 'ram', 'disk', 'bandwidth', 'ips', 'price', 'live'];
 		$i = 0;
 		foreach ($children as $c) {
-			$child = $c->childNodes; $length = $child->length;
-			if (!$length) continue;
+			$child = $c->childNodes;
+			if (!is_object($child)) continue;
+			$length = $child->length;
 
 			if ($length === 1) { // normal values
 				$el = $child->item(0);
@@ -72,5 +98,14 @@ class Test extends Shared\Controller {
 	protected function _filterInput($string) {
 		$str = preg_replace('/[^a-zA-Z0-9\s]/', '', $string);
 		return trim($str);
+	}
+
+	/**
+	 * @protected
+	 */
+	public function _secure() {
+		if (php_sapi_name() !== 'cli') {
+            $this->redirect("/404");
+        }
 	}
 }

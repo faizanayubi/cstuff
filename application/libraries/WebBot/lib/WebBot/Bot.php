@@ -131,7 +131,7 @@ class Bot {
 		$this->log[] = $date.' => '. $message . ' ('. $method. ')';
 		$current = count($this->log) - 1;
 
-		$file = self::$conf_store_dir.'log.txt';
+		// $file = self::$conf_store_dir.'log.txt';
 		
 		// comment out these lines below to stop logging bot requests
 		if($this->start) {
