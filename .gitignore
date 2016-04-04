@@ -1,6 +1,11 @@
-
+# config-file
 application/configuration/database.ini
 
+<<<<<<< HEAD
 application/configuration/mail.ini
 
 application/configuration/payment.ini
+=======
+# logs
+logs/
+>>>>>>> origin/master
