@@ -1,2 +1,6 @@
 
 application/configuration/database.ini
+
+application/configuration/mail.ini
+
+application/configuration/payment.ini

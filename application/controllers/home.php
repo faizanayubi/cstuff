@@ -6,6 +6,7 @@
 use Shared\Controller as Controller;
 use Framework\RequestMethods as RequestMethods;
 use Framework\Registry as Registry;
+use \Curl\Curl;
 
 class Home extends Controller {
 
@@ -102,19 +103,96 @@ class Home extends Controller {
         $server->save();
 
         $invoice = new Models\Invoice(array(
-
+            "user_id" => $user->id,
+            "amount" => $item->price,
+            "duedate" => strftime("%Y-%m-%d", strtotime('now')),
+            "ref" => ""
         ));
         $invoice->save();
 
         $bill = new Models\Bill(array(
-            
+            "user_id" => $user->id,
+            "item_id" => $item->id,
+            "invoice_id" => $invoice->id
         ));
         $bill->save();
 
         $order = new Models\Order(array(
-            
+            "user_id" => $user->id,
+            "service_id" => $service->id
         ));
         $order->save();
+    }
+
+    protected function _pay($value) {
+        $configuration = Registry::get("configuration");
+        $imojo = $configuration->parse("configuration/payment");
+        $curl = new Curl();
+        $curl->setHeader('X-Api-Key', $imojo->payment->instamojo->key);
+        $curl->setHeader('X-Auth-Token', $imojo->payment->instamojo->auth);
+        $curl->post('https://www.instamojo.com/api/1.1/payment-requests/', array(
+            "purpose" => "Advertisement",
+            "amount" => $amount,
+            "buyer_name" => $this->user->name,
+            "email" => $this->user->email,
+            "phone" => $this->user->phone,
+            "redirect_url" => "http://clicks99.com/finance/success",
+            "allow_repeated_payments" => false
+        ));
+
+        $payment = $curl->response;
+        if ($payment->success == "true") {
+            $instamojo = new Instamojo(array(
+                "user_id" => $this->user->id,
+                "payment_request_id" => $payment->payment_request->id,
+                "amount" => $payment->payment_request->amount,
+                "status" => $payment->payment_request->status,
+                "longurl" => $payment->payment_request->longurl,
+                "live" => 0
+            ));
+            $instamojo->save();
+            $view->set("success", true);
+            $view->set("payurl", $instamojo->longurl);
+        }
+    }
+
+    public function success() {
+        $this->seo(array("title" => "Thank You", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+        $configuration = Registry::get("configuration");
+        $payment_request_id = RequestMethods::get("payment_request_id");
+
+        if ($payment_request_id) {
+            $instamojo = Instamojo::first(array("payment_request_id = ?" => $payment_request_id));
+
+            if ($instamojo) {
+                $imojo = $configuration->parse("configuration/payment");
+                $curl = new Curl();
+                $curl->setHeader('X-Api-Key', $imojo->payment->instamojo->key);
+                $curl->setHeader('X-Auth-Token', $imojo->payment->instamojo->auth);
+                $curl->get('https://www.instamojo.com/api/1.1/payment-requests/'.$payment_request_id.'/');
+                $payment = $curl->response;
+
+                $instamojo->status = $payment->payment_request->status;
+                if ($instamojo->status == "Completed") {
+                    $instamojo->live = 1;
+                }
+                $instamojo->save();
+
+                $user = User::first(array("id = ?" => $instamojo->user_id));
+
+                $account->balance += $instamojo->amount;
+                $account->save();
+
+                $this->notify(array(
+                    "template" => "accountCredited",
+                    "subject" => "Payment Received",
+                    "user" => $user,
+                    "transaction" => $transaction
+                ));
+            }
+
+        }
     }
 
 }

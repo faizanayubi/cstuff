@@ -67,5 +67,5 @@ class Organization extends \Shared\Model {
      * @validate required
      * @label country
      */
-    protected $_country;    
+    protected $_country;
 }

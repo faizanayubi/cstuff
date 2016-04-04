@@ -596,7 +596,8 @@ img{
 /*Testimonial Area CSS*/
 
 .testimonial-innr{
-	background: url(http://cloudstuff.tech/public/assets/images/testimonial.jpg) fixed;
+	background: url(http://cloudstuff.tech/public/assets/images/map-image.png) fixed;
+	background-color: #222;
 	background-size:cover;
 	padding:75px 0 110px;
 }
