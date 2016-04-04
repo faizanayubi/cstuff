@@ -7,6 +7,7 @@
 use Shared\Controller as Controller;
 use Framework\RequestMethods as RequestMethods;
 use Framework\Registry as Registry;
+use \Curl\Curl;
 
 class Auth extends Controller {
     /**
@@ -51,5 +52,193 @@ class Auth extends Controller {
     public function logout() {
         session_destroy();
         $this->redirect("/index.html");
+    }
+
+    protected function _server($user, $item) {
+        $service = new Models\Service(array(
+            "user_id" => $user->id,
+            "item_id" => $item->id,
+            "period" => 30,
+            "price" => $item->price,
+            "type" => "SERVER",
+            "renewal" => strftime("%Y-%m-%d", strtotime('+30 day'))
+        ));
+        $service->save();
+
+        $server = new Models\Server(array(
+            "user_id" => $user->id,
+            "item_id" => $item->id,
+            "os" => RequestMethods::post("os"),
+            "user" => "",
+            "pass" => ""
+        ));
+        $server->save();
+
+        $invoice = new Models\Invoice(array(
+            "user_id" => $user->id,
+            "amount" => $item->price,
+            "duedate" => strftime("%Y-%m-%d", strtotime('now')),
+            "ref" => ""
+        ));
+        $invoice->save();
+
+        $bill = new Models\Bill(array(
+            "user_id" => $user->id,
+            "item_id" => $item->id,
+            "invoice_id" => $invoice->id
+        ));
+        $bill->save();
+
+        $order = new Models\Order(array(
+            "user_id" => $user->id,
+            "service_id" => $service->id
+        ));
+        $order->save();
+    }
+
+    protected function _pay($user, $item) {
+        $configuration = Registry::get("configuration");
+        $imojo = $configuration->parse("configuration/payment");
+        $curl = new Curl();
+        $curl->setHeader('X-Api-Key', $imojo->payment->instamojo->key);
+        $curl->setHeader('X-Auth-Token', $imojo->payment->instamojo->auth);
+        $curl->post('https://www.instamojo.com/api/1.1/payment-requests/', array(
+            "purpose" => "Advertisement",
+            "amount" => $item->amount,
+            "buyer_name" => $user->name,
+            "email" => $user->email,
+            "phone" => $user->phone,
+            "redirect_url" => "http://cloudstuff.tech/success.html",
+            "allow_repeated_payments" => false
+        ));
+
+        $payment = $curl->response;
+        if ($payment->success == "true") {
+            $instamojo = new Models\Instamojo(array(
+                "user_id" => $this->user->id,
+                "payment_request_id" => $payment->payment_request->id,
+                "amount" => $payment->payment_request->amount,
+                "status" => $payment->payment_request->status,
+                "longurl" => $payment->payment_request->longurl,
+                "live" => 0
+            ));
+            $instamojo->save();
+            $view->set("success", true);
+            $view->set("payurl", $instamojo->longurl);
+        }
+    }
+
+    /**
+     * @before _session
+     */
+    public function login() {
+        $this->seo(array("title" => "Login", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+        $fb = RequestMethods::get("fb", false);
+        if (RequestMethods::post("action") == "login") {
+            $message =  $this->_login();
+            $view->set("message", $message);
+        }
+        $view->set("fb", $fb);
+    }
+
+    /**
+     * @before _session
+     */
+    public function forgotpassword() {
+        $this->seo(array("title" => "Forgot Password", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+
+        if (RequestMethods::post("action") == "reset" && $this->reCaptcha()) {
+            $message = $this->_resetPassword();
+            $view->set("message", $message);
+        }
+    }
+
+    /**
+     * @before _session
+     */
+    public function resetpassword($token) {
+        $this->seo(array("title" => "Forgot Password", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+
+        $meta = Meta::first(array("value = ?" => $token, "property = ?" => "resetpass"));
+        if (!isset($meta)) {
+            $this->redirect("/index.html");
+        }
+
+        if (RequestMethods::post("action") == "change" && $this->reCaptcha()) {
+            $user = User::first(array("id = ?" => $meta->user_id));
+            if(RequestMethods::post("password") == RequestMethods::post("cpassword")) {
+                $user->password = sha1(RequestMethods::post("password"));
+                $user->save();
+                $meta->delete();
+                $view->set("message", 'Password changed successfully now <a href="/login.html">Login</a>');
+            } else{
+                $view->set("message", 'Password Does not match');
+            }
+        }
+    }
+
+    protected function _login() {
+        $exist = User::first(array("email = ?" => RequestMethods::post("email")));
+        if($exist) {
+            if($exist->password == sha1(RequestMethods::post("password"))) {
+                if ($exist->live) {
+                    return $this->authorize($exist);
+                } else {
+                    return "User account not verified";
+                }
+            } else{
+                return 'Wrong Password, Try again or <a href="/auth/forgotpassword.html">Reset Password</a>';
+            }
+            
+        } else {
+            return 'User doesnot exist. Please signup <a href="/publisher/register.html">here</a>';
+        }
+    }
+
+    protected function authorize($user) {
+        $session = Registry::get("session");
+        //setting organization
+        $organization = Models\Organization::first(array("user_id = ?" => $user->id));
+        if ($organization) {
+            $this->setUser($user);
+            $session->set("organization", $organization);
+            $this->redirect("/publisher/index.html");
+        }
+    }
+
+    protected function _resetPassword() {
+        $exist = User::first(array("email = ?" => RequestMethods::post("email")), array("id", "email", "name"));
+        if ($exist) {
+            $meta = new Meta(array(
+                "user_id" => $exist->id,
+                "property" => "resetpass",
+                "value" => uniqid()
+            ));
+            $meta->save();
+            $this->notify(array(
+                "template" => "forgotPassword",
+                "subject" => "New Password Requested",
+                "user" => $exist,
+                "meta" => $meta
+            ));
+
+            return "Password Reset Email Sent Check Your Email. Check in Spam too.";
+        } else {
+            return "User doesnot exist.";
+        }
+    }
+
+    /**
+     * @before _secure, _admin
+     */
+    public function loginas($user_id) {
+        $session = Registry::get("session");
+        $session->set("admin_user_id", $user_id);
+        $this->setUser(false);
+        $user = User::first(array("id = ?" => $user_id));
+        $this->authorize($user);
     }
 }

@@ -55,6 +55,38 @@ class Controller extends \Framework\Controller {
         return $this;
     }
 
+    protected function log($message = "") {
+        $logfile = APP_PATH . "/logs/" . date("Y-m-d") . ".txt";
+        $new = file_exists($logfile) ? false : true;
+        if ($handle = fopen($logfile, 'a')) {
+            $timestamp = strftime("%Y-%m-%d %H:%M:%S", time());
+            $content = "[{$timestamp}]{$message}\n";
+            fwrite($handle, $content);
+            fclose($handle);
+            if ($new) {
+                chmod($logfile, 0777);
+            }
+        }
+    }
+
+    /**
+     * The method checks whether a file has been uploaded. If it has, the method attempts to move the file to a permanent location.
+     * @param string $name
+     * @param string $type files or images
+     */
+    protected function _upload($name, $type = "images") {
+        if (isset($_FILES[$name])) {
+            $file = $_FILES[$name];
+            $path = APP_PATH . "/public/assets/uploads/{$type}/";
+            $extension = pathinfo($file["name"], PATHINFO_EXTENSION);
+            $filename = uniqid() . ".{$extension}";
+            if (move_uploaded_file($file["tmp_name"], $path . $filename)) {
+                return $filename;
+            }
+        }
+        return FALSE;
+    }
+
     public function __construct($options = array()) {
         parent::__construct($options);
 

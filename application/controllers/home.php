@@ -72,7 +72,8 @@ class Home extends Controller {
                     ));
                     $organization->save();
 
-                    $this->newServer($user, $item);
+                    $this->_server($user, $item);
+                    $this->_pay($user, $item);
                 }
             } else {
                 $organization = Models\Organization::first(array("user_id = ?" => $user->id));
@@ -82,80 +83,6 @@ class Home extends Controller {
         $view->set("item", $item);
     }
 
-    protected function newServer($user, $item) {
-        $service = new Models\Service(array(
-            "user_id" => $user->id,
-            "item_id" => $item->id,
-            "period" => 30,
-            "price" => $item->price,
-            "type" => "SERVER",
-            "renewal" => strftime("%Y-%m-%d", strtotime('+30 day'))
-        ));
-        $service->save();
-
-        $server = new Models\Server(array(
-            "user_id" => $user->id,
-            "item_id" => $item->id,
-            "os" => RequestMethods::post("os"),
-            "user" => "",
-            "pass" => ""
-        ));
-        $server->save();
-
-        $invoice = new Models\Invoice(array(
-            "user_id" => $user->id,
-            "amount" => $item->price,
-            "duedate" => strftime("%Y-%m-%d", strtotime('now')),
-            "ref" => ""
-        ));
-        $invoice->save();
-
-        $bill = new Models\Bill(array(
-            "user_id" => $user->id,
-            "item_id" => $item->id,
-            "invoice_id" => $invoice->id
-        ));
-        $bill->save();
-
-        $order = new Models\Order(array(
-            "user_id" => $user->id,
-            "service_id" => $service->id
-        ));
-        $order->save();
-    }
-
-    protected function _pay($value) {
-        $configuration = Registry::get("configuration");
-        $imojo = $configuration->parse("configuration/payment");
-        $curl = new Curl();
-        $curl->setHeader('X-Api-Key', $imojo->payment->instamojo->key);
-        $curl->setHeader('X-Auth-Token', $imojo->payment->instamojo->auth);
-        $curl->post('https://www.instamojo.com/api/1.1/payment-requests/', array(
-            "purpose" => "Advertisement",
-            "amount" => $amount,
-            "buyer_name" => $this->user->name,
-            "email" => $this->user->email,
-            "phone" => $this->user->phone,
-            "redirect_url" => "http://clicks99.com/finance/success",
-            "allow_repeated_payments" => false
-        ));
-
-        $payment = $curl->response;
-        if ($payment->success == "true") {
-            $instamojo = new Instamojo(array(
-                "user_id" => $this->user->id,
-                "payment_request_id" => $payment->payment_request->id,
-                "amount" => $payment->payment_request->amount,
-                "status" => $payment->payment_request->status,
-                "longurl" => $payment->payment_request->longurl,
-                "live" => 0
-            ));
-            $instamojo->save();
-            $view->set("success", true);
-            $view->set("payurl", $instamojo->longurl);
-        }
-    }
-
     public function success() {
         $this->seo(array("title" => "Thank You", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
@@ -163,7 +90,7 @@ class Home extends Controller {
         $payment_request_id = RequestMethods::get("payment_request_id");
 
         if ($payment_request_id) {
-            $instamojo = Instamojo::first(array("payment_request_id = ?" => $payment_request_id));
+            $instamojo = Models\Instamojo::first(array("payment_request_id = ?" => $payment_request_id));
 
             if ($instamojo) {
                 $imojo = $configuration->parse("configuration/payment");
@@ -179,17 +106,14 @@ class Home extends Controller {
                 }
                 $instamojo->save();
 
-                $user = User::first(array("id = ?" => $instamojo->user_id));
-
-                $account->balance += $instamojo->amount;
-                $account->save();
+                /*$user = Models\User::first(array("id = ?" => $instamojo->user_id));
 
                 $this->notify(array(
                     "template" => "accountCredited",
                     "subject" => "Payment Received",
                     "user" => $user,
                     "transaction" => $transaction
-                ));
+                ));*/
             }
 
         }
