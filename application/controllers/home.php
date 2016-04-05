@@ -40,7 +40,7 @@ class Home extends Controller {
 		$this->seo(array("title" => "Cart"));
 		$view = $this->getActionView();
 
-        $item = Models\Item::first(array("live = ?" => true));
+        $item = Models\Item::first(array("live = ?" => true, "id = ?" => $item_id));
         if (!$item) {
             $this->redirect("/index.html");
         }

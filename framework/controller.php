@@ -145,8 +145,8 @@ namespace Framework {
                 if ($doAction) {
                     $view = $this->actionView;
 
-                    $headers = getallheaders(); $api = isset($headers['X-JSON-Api']) && $headers['X-JSON-Api'] == 'SwiftMVC';
-                    if ($this->defaultExtension == "json" && $api) {
+                    $headers = getallheaders();
+                    if ($this->defaultExtension == "json") {
                         $obj = array();
                         $data = $view->data;
 
