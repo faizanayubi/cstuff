@@ -195,8 +195,8 @@
                         {foreach $item in $items}
                             <tr>
                                 <td>
-                                    <strong>{echo $item->plan}</strong><br>
-                                    {echo $item->processor}
+                                    <a href="/cart/{echo $item->id}.html"><strong>{echo $item->plan}</strong><br>
+                                    {echo $item->processor}</a>
                                 </td>
                                 <td>{echo $item->ram}</td>
                                 <td>{echo $item->disk}</td>

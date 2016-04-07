@@ -30,17 +30,12 @@
                         <div class="col-md-6 col-sm-8">
                             <div class="form">
                                 <form action="" method="post" class="contact-form text-center" role="form">
-                                    <!-- IF MAIL SENT SUCCESSFULLY -->
-                                    <h6 class="success">
-                                    <span class="olored-text icon_check"></span> Your message has been sent successfully.</h6>
-
-                                    <!-- IF MAIL SENDING UNSUCCESSFULL -->
                                     {if isset($message)}
                                     <h6 class="error">
                                     <span class="colored-text icon_error-circle_alt"></span> {echo $message}</h6>
                                     {/if}
-                                    <input id="cf-email" type="email" name="email" placeholder="Your Email">
-                                    <input id="cf-phone" type="password" name="password" placeholder="Your password">
+                                    <input type="email" name="email" class="form-control" placeholder="Your Email">
+                                    <input type="password" name="password" class="form-control" placeholder="Your password">
                                     <input type="hidden" name="action" value="login">
                                     <input type="submit" class="button red" value="Login" id="submit" name="submit" data-style="expand-left"/>
                                 </form>

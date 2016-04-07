@@ -112,8 +112,8 @@ class Auth extends Controller {
         $curl->setHeader('X-Api-Key', $imojo->payment->instamojo->key);
         $curl->setHeader('X-Auth-Token', $imojo->payment->instamojo->auth);
         $curl->post('https://www.instamojo.com/api/1.1/payment-requests/', array(
-            "purpose" => "Advertisement",
-            "amount" => $item->amount,
+            "purpose" => "Dedicated Server",
+            "amount" => $item->price,
             "buyer_name" => $user->name,
             "email" => $user->email,
             "phone" => $user->phone,
@@ -124,7 +124,7 @@ class Auth extends Controller {
         $payment = $curl->response;
         if ($payment->success == "true") {
             $instamojo = new Models\Instamojo(array(
-                "user_id" => $this->user->id,
+                "user_id" => $user->id,
                 "payment_request_id" => $payment->payment_request->id,
                 "amount" => $payment->payment_request->amount,
                 "status" => $payment->payment_request->status,
@@ -132,8 +132,7 @@ class Auth extends Controller {
                 "live" => 0
             ));
             $instamojo->save();
-            $view->set("success", true);
-            $view->set("payurl", $instamojo->longurl);
+            return $instamojo->longurl;
         }
     }
 

@@ -3,12 +3,11 @@
 /**
  * @author Faizan Ayubi, Hemant Mann
  */
-use Shared\Controller as Controller;
 use Framework\RequestMethods as RequestMethods;
 use Framework\Registry as Registry;
 use \Curl\Curl;
 
-class Home extends Controller {
+class Home extends Auth {
 
     public function index() {
     	$this->getLayoutView()->set("seo", Framework\Registry::get("seo"));
@@ -72,10 +71,17 @@ class Home extends Controller {
                     ));
                     $organization->save();
 
-                    $this->_server($user, $item);
-                    $url = $this->_pay($user, $item);
-                    $this->redirect($url);
+                    $this->notify(array(
+                        "template" => "newAccount",
+                        "subject" => "Your Account Information",
+                        "user" => $user,
+                        "pass" => $pass,
+                        "organization" => $organization
+                    ));
                 }
+                $this->_server($user, $item);
+                $url = $this->_pay($user, $item);
+                $this->redirect($url);
             } else {
                 $organization = Models\Organization::first(array("user_id = ?" => $user->id));
             }
@@ -107,14 +113,14 @@ class Home extends Controller {
                 }
                 $instamojo->save();
 
-                /*$user = Models\User::first(array("id = ?" => $instamojo->user_id));
+                $user = Models\User::first(array("id = ?" => $instamojo->user_id));
 
                 $this->notify(array(
-                    "template" => "accountCredited",
-                    "subject" => "Payment Received",
+                    "template" => "paidInvoice",
+                    "subject" => "Invoice Paid",
                     "user" => $user,
-                    "transaction" => $transaction
-                ));*/
+                    "instamojo" => $instamojo
+                ));
             }
 
         }
