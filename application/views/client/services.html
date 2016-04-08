@@ -22,9 +22,15 @@
                         		<td>#{echo $s->id}</td>
                         		<td>{echo $s->name}</td>
                         		<td>{echo $s->type}</td>
-                        		<td>{}</td>
+                        		<td>
+                                {if $s->ips}
+                                    {echo implode(",", json_decode($s->ips))}
+                                {/if} {else}
+                                <span class="label label-primary"> In Process</span>
+                                {/else}
+                                </td>
                         		<td>{echo $s->price}</td>
-                        		<td>{echo Framework\StringMethods::datetime_to_text($s->renewal)}</td>
+                        		<td>{echo Framework\StringMethods::only_date($s->renewal)}</td>
                         		<td>
                         		{if $s->live}
                         		<span class="label label-success"> Completed</span>

@@ -2,7 +2,6 @@
     <div class="container-fluid">
         <div class="row">
             <h1>Invoices</h1>
-
             <div class="table-responsive">
                 <table class="table table-striped text-center table-hover table-bordered">
                     <thead>
@@ -11,20 +10,16 @@
                             <th>Invoice Date</th>
                             <th>Due Date</th>
                             <th>Amount</th>
-                            <th>Due</th>
-                            <th>Paid</th>
                         </tr>
                     </thead>
                     <tbody>
                         {foreach $i in $invoices}
-                       	<tr>
-                       		<td>{echo $i->id}</td>
-                       		<td>{echo Framework\StringMethods::datetime_to_text($i->created)}</td>
-                       		<td>{echo Framework\StringMethods::datetime_to_text($i->duedate)}</td>
-                       		<td>INR {echo $i->amount}</td>
-                       		<td>{}</td>
-                       		<td>{}</td>
-                       	</tr>
+                        <tr>
+                            <td>{echo $i->id}</td>
+                            <td>{echo Framework\StringMethods::only_date($i->created)}</td>
+                            <td>{echo Framework\StringMethods::only_date($i->duedate)}</td>
+                            <td><i class="fa fa-inr"></i> {echo $i->amount}</td>
+                        </tr>
                         {/foreach}
                     </tbody>
                 </table>

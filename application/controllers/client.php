@@ -6,6 +6,7 @@
 use Framework\Registry as Registry;
 use Framework\RequestMethods as RequestMethods;
 use Framework\ArrayMethods as ArrayMethods;
+use Shared\Services\Client as ClientService;
 
 class Client extends Auth {
     /**
@@ -54,29 +55,8 @@ class Client extends Auth {
     	$this->seo(array("title" => "Services"));
         $view = $this->getActionView();
 
-        $services = $this->_services();
+        $services = ClientService::services($this->user);
         $view->set("services", $services);
-    }
-
-    protected function _services() {
-        $services = Models\Service::all(["user_id = ?" => $this->user->id]);
-        $items = Models\Item::all(["user_id = ?" => $this->user->id], ["plan", "id"]);
-
-        $results = [];
-        foreach ($services as $s) {
-            $item = $items[$s->item_id];
-            $results[$s->id] = ArrayMethods::toObject([
-                "id" => $s->id,
-                "name" => $item->plan,
-                "type" => $s->type,
-                "price" => $s->price,
-                "period" => $s->period,
-                "renewal" => $s->renewal,
-                "created" => $s->created,
-                "live" => $s->live
-            ]);
-        }
-        return $results;
     }
 
     /**
@@ -151,27 +131,8 @@ class Client extends Auth {
     	$this->seo(array("title" => "Orders"));
         $view = $this->getActionView();
 
-        $orders = $this->_orders();
+        $orders = ClientService::orders($this->user);
         $view->set("orders", $orders);
-    }
-
-    protected function _orders() {
-        $orders = Models\Order::all(["user_id = ?" => $this->user->id], ["id", "service_id", "modified", "live"]);
-        $services = $this->_services();
-
-        $results = [];
-        foreach ($orders as $o) {
-            $s = $services[$o->service_id];
-            unset($s->id); unset($s->live);
-            $d = [
-                "id" => $o->id,
-                "live" => $o->live,
-                "service_id" => $o->service_id,
-                "updated" => $o->updated
-            ];
-            $results[$o->id] = (object) array_merge($d, (array) $s);
-        }
-        return $results;
     }
 
     /**
