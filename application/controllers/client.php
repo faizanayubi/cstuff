@@ -108,14 +108,6 @@ class Client extends Auth {
     /**
      * @before _secure
      */
-    public function tickets() {
-    	$this->seo(array("title" => "Tickets"));
-        $view = $this->getActionView();
-    }
-
-    /**
-     * @before _secure
-     */
     public function invoices() {
     	$this->seo(array("title" => "Invoices"));
         $view = $this->getActionView();
