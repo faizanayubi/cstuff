@@ -131,15 +131,15 @@ class Bot {
 		$this->log[] = $date.' => '. $message . ' ('. $method. ')';
 		$current = count($this->log) - 1;
 
-		// $file = self::$conf_store_dir.'log.txt';
+		$file = self::$conf_store_dir.'log.txt';
 		
 		// comment out these lines below to stop logging bot requests
 		if($this->start) {
-			// file_put_contents($file, "\t\t\t\t----------\t----------\n", FILE_APPEND);
+			file_put_contents($file, "\t\t\t\t----------\t----------\n", FILE_APPEND);
 			$this->start = false;
 		}
 		
-		// file_put_contents($file,  $this->log["{$current}"]."\n", FILE_APPEND);
+		file_put_contents($file,  $this->log["{$current}"]."\n", FILE_APPEND);
 	}
 
 	/**

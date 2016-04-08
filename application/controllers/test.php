@@ -20,6 +20,7 @@ class Test extends \Auth {
 		$bot->execute();
 		$doc = array_shift($bot->getDocuments());
 		$el = $doc->query('//*[@id="window"]/table')->item(0);
+		$original_items = Models\Item::all();
 
 		$children = $el->childNodes;
 		foreach ($children as $c) {
@@ -38,13 +39,18 @@ class Test extends \Auth {
 				if (!$item) {
 					$item = new Models\Item(array_merge($result, ['user_id' => 1]));
 				} else {
+					unset($original_items[$item->id]);
 					$item->price = $result['price'];
 					$item->ips = $result['ips'];
 					$item->bandwidth = $result['bandwidth'];
 				}
-				$item->live = $result['live'];
+				$item->live = (($result['live'])) ? $result['live'] : '0';
 				$item->save();
 			}
+		}
+		foreach ($original_items as $i) {
+			$i->live = false;
+			$i->save();
 		}
 		$this->log("Items cron ended");
 	}

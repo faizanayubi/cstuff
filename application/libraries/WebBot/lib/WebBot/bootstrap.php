@@ -19,5 +19,5 @@ Bot::$conf_include_document_field_raw_values = false;
 
 // set the directory for storing information
 // $dir = your/custom/path;
-// $dir = LIB_PATH.'/WebBot/tmp/';
-// Bot::$conf_store_dir = $dir;
+$dir = APP_PATH.'/application/libraries/WebBot/tmp/';
+Bot::$conf_store_dir = $dir;
