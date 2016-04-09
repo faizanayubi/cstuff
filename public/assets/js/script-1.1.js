@@ -32,6 +32,14 @@ jQuery(function() {
             return false;
         });
 
+        jQuery('.pricing').on('click', function() {
+            jQuery('html, body').animate({ scrollTop: $('#pricing').offset().top - 0 }, 1500,
+                function() {
+                    parallax();
+                });
+            return false;
+        });
+
         jQuery('.go-form').on('click', function() {
             jQuery('html, body').animate({ scrollTop: $('#form-area').offset().top - 0 }, 1500,
                 function() {

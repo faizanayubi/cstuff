@@ -29,6 +29,16 @@ $routes = array(
         "action" => "index"
     ),
     array(
+        "pattern" => "plans",
+        "controller" => "home",
+        "action" => "plans"
+    ),
+    array(
+        "pattern" => "contact",
+        "controller" => "home",
+        "action" => "contact"
+    ),
+    array(
         "pattern" => "login",
         "controller" => "auth",
         "action" => "login"

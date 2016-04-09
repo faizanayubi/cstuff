@@ -1,0 +1,63 @@
+<div class="pricing-area" id="pricing">
+    <div class="container">
+        <div class="top-bar">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 mobile-center">
+                    <h3 class="logo"><a href="/">CloudStuff</a></h3>
+                </div>
+                <div class="col-md-6 col-sm-6 text-right mobile-center">
+                    <a href="tel:+919958636988" class="button red">+91-9958636988 <img src="{echo CDN}images/support.png" alt="Support" /> </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="text-center">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <h2>Dedicated Hosting Plans</h2>
+                    <p>When building a website, start here. Our shared dedicated delivers a powerful, proven platform that's perfect for hosting your Application</p>
+                    <hr>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+            <div class="col-md-12 col-sm-12">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <td>Processor</td>
+                                <td>RAM</td>
+                                <td>HDD</td>
+                                <td>Included</td>
+                                <td>Price</td>
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $item in $items}
+                            <tr>
+                                <td>
+                                    <a href="/cart/{echo $item->id}.html"><strong>{echo $item->plan}</strong><br>
+                                {echo $item->processor}</a>
+                                </td>
+                                <td><b>{echo $item->ram}</b></td>
+                                <td>{echo $item->disk}</td>
+                                <td>
+                                    {echo $item->bandwidth}
+                                    <br> {echo $item->ips}
+                                </td>
+                                <td>INR <b>{echo $item->price}</b>/month</td>
+                                <td>
+                                    <a href="/cart/{echo $item->id}.html" class="btn btn-primary btn-xs">Order Now!</a>
+                                    <br>
+                                    <strong>FREE Setup</strong>
+                                </td>
+                            </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

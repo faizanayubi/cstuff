@@ -13,27 +13,36 @@ class Home extends Auth {
     	$this->getLayoutView()->set("seo", Framework\Registry::get("seo"));
     	$view = $this->getActionView();
 
-    	$items = Models\Item::all(array("live = ?" => true));
+        if (RequestMethods::post("action") == "lead") {
+            $lead = new Models\Lead(array(
+                "name" => RequestMethods::post("name"),
+                "email" => RequestMethods::post("email"),
+                "phone" => RequestMethods::post("phone")
+            ));
+            $lead->save();
+        }
+
+    	$items = Models\Item::all(array("live = ?" => true), array("*"), "price", "asc", 5, 1);
     	$view->set("items", $items);
     }
 
-    public function lead() {
-        $this->JSONview();
+    public function plans() {
+        $this->seo(array("title" => "Cheap and Best Dedicated Server Plans"));
         $view = $this->getActionView();
-        if (RequestMethods::post("action") == "lead") {
-            $user = new Models\User(array(
-                "name" => RequestMethods::post("name"),
-                "email" => RequestMethods::post("email"),
-                "phone" => RequestMethods::post("phone"),
-                "password" => sha1($pass),
-                "admin" => false,
-                "live" => 1
-            ));
-            $user->save();
-            $view->set("success", true);
-        }
+
+        $items = Models\Item::all(array("live = ?" => true));
+        $view->set("items", $items);
     }
 
+    public function features() {
+        $this->seo(array("title" => "CloudStuff Features"));
+        $view = $this->getActionView();
+    }
+
+    public function contact() {
+        $this->seo(array("title" => "Contact"));
+        $view = $this->getActionView();
+    }
 
     public function cart($item_id) {
 		$this->seo(array("title" => "Cart"));
