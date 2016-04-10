@@ -5,6 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="{echo $seo->getDescription()}">
         <meta name="author" content="{echo $seo->getAuthor()}">
+        <meta name="keywords" content="{echo $seo->getKeywords()}">
+        <meta property="og:type"   content="website" />
+        <meta property="og:title" content="{echo $seo->getTitle()}" />
+        <meta property="og:description" content="{echo $seo->getDescription()}">
+        <meta property="og:url" content="{echo URL}" />
+        <meta property="og:image" content="{echo $seo->getPhoto()}" />
 
         <title>{echo $seo->getTitle()}</title>
 

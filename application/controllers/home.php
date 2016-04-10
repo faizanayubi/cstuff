@@ -135,4 +135,29 @@ class Home extends Auth {
         }
     }
 
+    public function products() {
+        $this->noview();
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=products.csv');
+
+        $output = fopen('php://output', 'w');
+        fputcsv($output, array("id", "availability", "condition", "description", "image_link", "link", "title", "price", "product_type", "brand",  "google_product_category"));
+        $items = Models\Item::all(array("live = ?" => true));
+        foreach ($items as $item) {
+            fputcsv($output, array(
+                $item->id,
+                "in stock",
+                "new",
+                $item->disk ." with ". $item->processor .", including ". $item->bandwidth .", ". $item->ips,
+                "http://cloudstuff.tech/public/assets/images/logo.jpg",
+                "http://cloudstuff.tech/cart/".$item->id.".html",
+                $item->ram .", ". $item->plan,
+                $item->price. " INR",
+                "Dedicated Server",
+                $item->plan,
+                "Electronics > Computers > Computer Servers"
+            ));
+        }
+    }
+
 }

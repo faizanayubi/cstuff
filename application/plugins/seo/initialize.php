@@ -9,7 +9,7 @@ $seo = new SEO(array(
     "description" => "We provide Cheap Dedicated Servers India with Premium Support only for sites with alexa rank less than 1 Lakh",
     "author" => "CloudStuff",
     "robots" => "INDEX,FOLLOW",
-    "photo" => CDN . "images/logo.png"
+    "photo" => CDN . "images/logo.jpg"
 ));
 
 Framework\Registry::set("seo", $seo);
