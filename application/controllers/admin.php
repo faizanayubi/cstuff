@@ -234,9 +234,13 @@ class Admin extends Auth {
     protected function sync($model) {
         $this->noview();
         $db = Framework\Registry::get("database");
-        $class = 'Models\\'. ucfirst($model);
-        $class = new $class;
-        $db->sync($class);
+        try {
+            $class = 'Models\\'. ucfirst($model);
+            $class = new $class;
+            $db->sync($class);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     /**
