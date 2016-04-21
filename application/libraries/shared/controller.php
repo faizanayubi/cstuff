@@ -145,6 +145,13 @@ class Controller extends \Framework\Controller {
         $database = Registry::get("database");
         $database->connect();
 
+        $mongoDB = Registry::get("MongoDB");
+        if (!$mongoDB) {
+            $mongo = new \MongoClient();
+            $mongoDB = $mongo->selectDB("stats");
+            Registry::set("MongoDB", $mongoDB);
+        }
+
         // schedule: load user from session           
         Events::add("framework.router.beforehooks.before", function($name, $parameters) {
             $session = Registry::get("session");

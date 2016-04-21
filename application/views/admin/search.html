@@ -8,6 +8,7 @@
                         <label class="sr-only">Table</label>
                         <select name="model" class="form-control" value="{echo $model}" id="searchModel">
                             {script $models = Shared\Markup::models()}
+                            {script asort($models)}
                             {foreach $m in $models}
                             <option value="{echo $m}" {if $m == "user"}selected=""{/if}>{echo ucfirst($m)}</option>
                             {/foreach}

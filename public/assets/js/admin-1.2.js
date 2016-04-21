@@ -146,6 +146,55 @@ $(document).ready(function () {
             $("input[name=value]").datepicker("option", "dateFormat", "yy-mm-dd");
         };
     });
+
+    $('.pingStats').on('click', function (e) {
+        e.preventDefault();
+        var item = $(this),
+            status = $('#status_' + item.data('pingid'));
+        item.html('<i class="fa fa-spinner fa-pulse"></i>');
+
+        request.read({
+            action: 'analytics/ping',
+            data: {link: item.data('record')}
+        }, function (data) {
+            if (data.success) {
+                item.html('Pinged: ' + data.count);
+            } else {
+                item.html('Pinged: 0');
+            }
+
+            if (data.status == "up") {
+                status.html('<span class="label label-success"><i class="fa fa-arrow-up"></i> UP</span>');
+            } else if (data.status == "down") {
+                status.html('<span class="label label-danger"><i class="fa fa-arrow-down"></i> DOWN</span>')
+            }
+        });
+    });
+
+    $('#serp_stats').submit(function (e) {
+        $('#stats').html('<p class="text-center"><i class="fa fa-spinner fa-spin fa-5x"></i></p>');
+        e.preventDefault();
+        var data = $(this).serializeArray();
+        request.read({
+            action: $(this).attr("action"),
+            data: data,
+            callback: function (data) {
+                $('#stats').html('');
+                if ($('#socialType').length !== 0) {
+                    $('#socialType').html(data.social.type + " of " + data.social.media);
+                }
+                if (data.data) {
+                    Morris.Line({
+                        element: 'stats',
+                        data: toArray(data.data),
+                        xkey: 'y',
+                        ykeys: ['a'],
+                        labels: [data.label || 'Rank']
+                    });
+                }
+            }
+        });
+    });
 });
 
 function toArray(object) {
