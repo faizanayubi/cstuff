@@ -25,7 +25,7 @@ class Admin extends Auth {
      * @before _admin
      */
     public function index() {
-        $this->seo(array("title" => "Dashboard", "view" => $this->getLayoutView()));
+        $this->seo(array("title" => "Dashboard"));
         $view = $this->getActionView();
     }
 
@@ -37,7 +37,7 @@ class Admin extends Auth {
      * @before _admin
      */
     public function search($table = NULL, $property = NULL, $val = 0, $page = 1, $limit = 10) {
-        $this->seo(array("title" => "Search", "keywords" => "admin", "description" => "admin", "view" => $this->getLayoutView()));
+        $this->seo(array("title" => "Search", "keywords" => "admin", "description" => "admin"));
         $view = $this->getActionView();
         $model = RequestMethods::get("model", $table);
         $property = RequestMethods::get("key", $property);
@@ -98,7 +98,7 @@ class Admin extends Auth {
      * @param type $id the id of object model
      */
     public function info($model = NULL, $id = NULL) {
-        $this->seo(array("title" => "{$model} info", "keywords" => "admin", "description" => "admin", "view" => $this->getLayoutView()));
+        $this->seo(array("title" => "{$model} info", "keywords" => "admin", "description" => "admin"));
         $view = $this->getActionView();
         $items = array();
         $values = array();
@@ -135,7 +135,7 @@ class Admin extends Auth {
      * @param type $id the id of object
      */
     public function update($table = NULL, $id = NULL) {
-        $this->seo(array("title" => "Update", "keywords" => "admin", "description" => "admin", "view" => $this->getLayoutView()));
+        $this->seo(array("title" => "Update", "keywords" => "admin", "description" => "admin"));
         $view = $this->getActionView();
 
         $model = "Models\\". $table;
@@ -214,7 +214,7 @@ class Admin extends Auth {
      * @before _admin
      */
     public function dataAnalysis() {
-        $this->seo(array("title" => "Data Analysis", "keywords" => "admin", "description" => "admin", "view" => $this->getLayoutView()));
+        $this->seo(array("title" => "Data Analysis", "keywords" => "admin", "description" => "admin"));
         $view = $this->getActionView();
         if (RequestMethods::get("action") == "dataAnalysis") {
             $startdate = RequestMethods::get("startdate");
@@ -253,6 +253,25 @@ class Admin extends Auth {
         $object = new $class;
 
         $view->set($object->columns);
+    }
+
+    /**
+     * @before _admin
+     */
+    public function leads() {
+        $this->seo(array("title" => "Leads", "keywords" => "admin", "description" => "admin"));
+        $view = $this->getActionView();
+        $page = RequestMethods::get("page", 1);
+        $limit = RequestMethods::get("limit", 10);
+
+        $leads = Models\Lead::all([], ["*"], "created", "desc", $limit, $page);
+        $count = Models\Lead::count();
+        $view->set([
+            "leads" => $leads,
+            "page" => $page,
+            "limit" => $limit,
+            "count" => $count
+        ]);
     }
 
     protected function install() {

@@ -1,16 +1,26 @@
 <?php
 
 use \WebBot\lib\WebBot\Bot as Bot;
+use Framework\RequestMethods as RequestMethods;
 
 /**
  * Class to scrape types of VPS provided
  */
-class Test extends \Auth {
+class Items extends \Auth {
+
+	/**
+	 * @protected
+	 */
+	public function _admin() {
+		parent::_secure();
+		parent::_admin();
+		$this->setLayout("layouts/admin");
+	}
 	
 	/**
 	 * @before _secure
 	 */
-	public function index() {
+	public function cron() {
 		$this->noview();
 
 		$this->log("Items cron started");
@@ -106,6 +116,41 @@ class Test extends \Auth {
 	protected function _filterInput($string) {
 		$str = preg_replace('/[^a-zA-Z0-9\s]/', '', $string);
 		return trim($str);
+	}
+
+	/**
+	 * @before _admin
+	 */
+	public function manage() {
+		$this->seo(["title" => "Manage Items"]);
+		$view = $this->getActionView();
+
+		$items = Models\Item::all([], ["*"], "modified", "desc");
+		$view->set("items", $items);
+	}
+
+	/**
+	 * @before _admin
+	 */
+	public function update($id, $status) {
+		$item = Models\Item::first(["id = ?" => $id]);
+		if (!$item) {
+			$this->redirect("/404");
+		}
+
+		$item->live = (int) $status;
+		$item->save();
+		$this->redirect(RequestMethods::server("HTTP_REFERER", "/admin"));
+	}
+
+	/**
+	 * @before _admin
+	 */
+	public function orders() {
+		$this->seo(["title" => "Manage Orders"]);
+
+		$orders = Models\Orders::all();
+		$view->set("orders", $orders);
 	}
 
 	/**

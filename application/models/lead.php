@@ -12,7 +12,7 @@ class Lead extends \Shared\Model {
      * @type text
      * @length 255
      * 
-     * @validate required, alpha, min(3), max(255)
+     * @validate required, min(3), max(255)
      * @label Name
      */
     protected $_name;

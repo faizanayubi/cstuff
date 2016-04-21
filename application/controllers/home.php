@@ -14,12 +14,18 @@ class Home extends Auth {
     	$view = $this->getActionView();
 
         if (RequestMethods::post("action") == "lead") {
-            $lead = new Models\Lead(array(
-                "name" => RequestMethods::post("name"),
-                "email" => RequestMethods::post("email"),
-                "phone" => RequestMethods::post("phone")
-            ));
-            $lead->save();
+            $lead = Models\Lead::first(["email = ?" => $email]);
+            if (!$lead) {
+                $lead = new Models\Lead([
+                    "name" => RequestMethods::post("name"),
+                    "email" => $email,
+                    "phone" => RequestMethods::post("phone")
+                ]);
+                if ($lead->validate()) {
+                    $lead->save();
+                }
+            }
+            $view->set("message", "Your Query has been submitted");
         }
 
     	$items = Models\Item::all(array("live = ?" => true), array("*"), "price", "asc", 5, 1);

@@ -282,11 +282,17 @@
                 <div class="row">
                     <div class="col-md-3 col-sm-2"></div>
                     <div class="col-md-6 col-sm-8">
+                        {if isset($message)}
+                        <div class="alert alert-success alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            {echo $message}
+                        </div>
+                        {/if}
                         <div class="form">
                             <form action="" id="contactform" class="contact-form text-center" role="form">
                                 <input id="cf-name" type="text" name="cf-name" placeholder="Your Name" required="">
-                                <input id="cf-email" type="email" name="cf-email" placeholder="Your Email" required=>
-                                <input id="cf-phone" type="text" name="cf-phone" placeholder="Your phone" required=>
+                                <input id="cf-email" type="email" name="cf-email" placeholder="Your Email" required="">
+                                <input id="cf-phone" type="text" name="cf-phone" placeholder="Your phone" required="">
                                 <input type="submit" class="button red" value="Call Me Now !" id="submit" name="submit" data-style="expand-left"/>
                                 <input type="hidden" name="action" value="lead">
                             </form>

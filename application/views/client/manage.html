@@ -1,0 +1,68 @@
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+        	<div class="col-lg-12">
+        		<h3 class="page-heading text-center">Manage Users </h3>
+                <form class="form-inline text-center" role="form" method="get" action="">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <select name="property" class="form-control" value="{echo $property}">
+                                <option value="user_id">User-id</option>
+                                <option value="email">Email</option>
+                                <option value="live">Live</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" name="value" class="form-control" placeholder="Enter value" value="{echo $value}" />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+        	</div>
+        </div>
+        <br><br>
+        <div class="row">
+        	<div class="col-lg-12">
+        		<div class="table-responsive">
+        			<table class="table table-striped text-center table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th># ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $u in $users}
+                            <tr>
+                                <td># {echo $u->id}</td>
+                                <td>{echo $u->name}</td>
+                                <td>{echo $u->email}</td>
+                                <td>{echo $u->phone}</td>
+                                <td>
+                                    <a href="/admin/update/user/{echo $u->id}" class="btn-xs btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
+                                </td>
+                            </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+        		</div>
+
+                <div class="text-center">
+                    <ul class="pager">
+                        {if ($page != 1)}
+                        <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
+                        {/if}
+                        {if ($page < $count/$limit)}
+                        <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
+                        {/if}
+                    </ul>
+                </div>
+        	</div>
+        </div>
+    </div>
+</div>

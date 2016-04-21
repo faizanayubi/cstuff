@@ -140,4 +140,30 @@ class Client extends Auth {
         }
         parent::render();
     }
+
+    /**
+     * @before _admin
+     */
+    public function manage() {
+        $this->setLayout("layouts/admin");
+        $this->seo(array("title" => "Manage Users", "keywords" => "admin", "description" => "admin"));
+        $view = $this->getActionView();
+        $page = RequestMethods::get("page", 1);
+        $limit = RequestMethods::get("limit", 10);
+
+        $property = RequestMethods::get("property", "live");
+        $val = RequestMethods::get("value", 1);
+
+        $where = ["{$property} = ?" => $val];
+        $users = Models\User::all($where, ["*"], "created", "desc", $limit, $page);
+        $count = Models\User::count($where);
+        $view->set([
+            "users" => $users,
+            "page" => $page,
+            "limit" => $limit,
+            "count" => $count,
+            "property" => $property,
+            "val" => $val
+        ]);
+    }
 }
