@@ -48,7 +48,7 @@ class Client {
 	}
 
     /**
-     * Find the 
+     * Find the orders for the given user
      */
     public static function orders($user) {
         $orders = \Models\Order::all(["user_id = ?" => $user->id], ["id", "service_id", "modified", "live"]);

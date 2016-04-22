@@ -65,6 +65,10 @@ class Items extends \Auth {
 		$this->log("Items cron ended");
 	}
 
+	/**
+	 * @param string $price
+	 * @return integer If Valid number else exception will be thrown
+	 */
 	protected function _price($price) {
 		preg_match("/([0-9]+\.?[0-9]+)/", $price, $matches);
 		if (isset($matches[1])) {
@@ -96,10 +100,10 @@ class Items extends \Auth {
 				} else {
 					$result[$keys[$i]] = $el->textContent;
 				}
-			} elseif ($length === 5) { // bandwidth column
+			} else if ($length === 5) { // bandwidth column
 				$result[$keys[$i]] = $this->_filterInput($child->item(0)->textContent);
 				$result[$keys[++$i]] = $this->_filterInput($child->item(2)->textContent);
-			} elseif ($length === 3) { // checkout button
+			} else if ($length === 3) { // checkout button
 				if ($child->item(0)->nodeName == 'input') {
 					if ($child->item(0)->getAttribute('style')) {
 						$result[$keys[$i]] = false;
@@ -148,9 +152,19 @@ class Items extends \Auth {
 	 */
 	public function orders() {
 		$this->seo(["title" => "Manage Orders"]);
+		$view = $this->getActionView();
+		$page = RequestMethods::get("page", 1);
+		$limit = RequestMethods::get("limit", 10);
 
-		$orders = Models\Orders::all();
-		$view->set("orders", $orders);
+		$orders = Models\Order::all([], ["*"], "created", "desc", $limit, $page);
+		$count = Models\Order::count();
+
+		$view->set([
+			"orders" => $orders,
+			"count" => $count,
+			"limit" => $limit,
+			"page" => $page
+		]);
 	}
 
 	/**

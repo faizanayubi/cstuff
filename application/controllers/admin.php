@@ -102,6 +102,7 @@ class Admin extends Auth {
         $view = $this->getActionView();
         $items = array();
         $values = array();
+        $view->set("model", $model);
 
         $model = "Models\\". $model;
         $object = $model::first(array("id = ?" => $id));
@@ -110,6 +111,7 @@ class Admin extends Auth {
             $key = substr($key, 1);
             if (strpos($key, "_id")) {
                 $child = ucfirst(substr($key, 0, -3));
+                $child = "Models\\" . $child;
                 $childobj = $child::first(array("id = ?" => $object->$key));
                 $childproperties = $childobj->getJsonData();
                 foreach ($childproperties as $k => $prop) {
@@ -124,7 +126,6 @@ class Admin extends Auth {
         }
         $view->set("items", $items);
         $view->set("values", $values);
-        $view->set("model", $model);
     }
 
     /**

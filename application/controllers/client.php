@@ -74,6 +74,11 @@ class Client extends Auth {
             ->set("org_fields", $org_fields)
             ->set("errors", []);
 
+        $this->_update($view, $user_fields, $org_fields);
+    }
+
+    protected function _update(&$view, $user_fields, $org_fields) {
+        $user = $this->user; $org = $this->organization;
         $action = RequestMethods::post("action");
         if ($action == "userUpdate") {
             foreach ($user_fields as $key => $value) {
