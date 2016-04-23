@@ -159,6 +159,25 @@ class Items extends \Auth {
 		$orders = Models\Order::all([], ["*"], "created", "desc", $limit, $page);
 		$count = Models\Order::count();
 
+		if (RequestMethods::post("action") == "updateServer") {
+			$ips = RequestMethods::post("ips");
+			$ips = explode(",", $ips);
+			$ips = array_map((function ($v) {
+				$v = str_replace(" ", '', $v);
+				return $v;
+			}), $ips);
+
+			$ips = json_encode($ips);
+
+			$server = Models\Server::first(["id = ?" => RequestMethods::post("server")]);
+			if (!$server) {
+				$view->set("message", "Invalid Server id");
+			} else {
+				$server->ips = $ips;
+				$server->save();
+				$view->set("message", "IP Alloted Successfully!!");
+			}
+		}
 		$view->set([
 			"orders" => $orders,
 			"count" => $count,

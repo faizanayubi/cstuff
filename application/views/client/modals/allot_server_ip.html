@@ -1,0 +1,25 @@
+<div class="modal fade" id="allotServerIP">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title text-center">Allot IP</h3>
+            </div>
+            <form class="form" action="" method="post">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="server ip">Server IP(s)</label>
+                        <input type="text" value="" required="" name="ips" class="form-control">
+                        <span class="help-block">Enter Comma separated IP</span>
+                    </div>
+                </div>
+                <input type="hidden" name="server" value="" id="serverID">
+                <input type="hidden" name="action" value="updateServer">
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default"><i class="fa fa-send"></i> GO</a>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

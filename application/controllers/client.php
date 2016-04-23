@@ -40,6 +40,11 @@ class Client extends Auth {
         return $this;
     }
 
+    public function logout() {
+        $this->setOrganization(false);
+        parent::logout();
+    }
+
     /**
      * @before _secure
      */

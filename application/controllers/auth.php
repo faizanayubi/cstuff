@@ -16,8 +16,7 @@ class Auth extends Controller {
      */
     public function _admin() {
         if (!$this->user->admin) {
-            $this->setUser(false);
-            throw new Router\Exception\Controller("Not a valid admin user account");
+            $this->logout();
         }
     }
 
@@ -59,8 +58,17 @@ class Auth extends Controller {
     }
 
     public function logout() {
-        session_destroy();
-        $this->redirect("/");
+        $session = Registry::get("session");
+        $this->setUser(false);
+
+        $admin = $session->get("admin_user_id");
+        if (!$admin) {
+            session_destroy();
+            $this->redirect("/");
+        } else {
+            $user = User::first(["id = ?" => $admin]);
+            $this->authorize($user);
+        }
     }
 
     protected function _server($user, $item) {
@@ -77,6 +85,7 @@ class Auth extends Controller {
         $server = new Models\Server(array(
             "user_id" => $user->id,
             "item_id" => $item->id,
+            "service_id" => $service->id,
             "os" => RequestMethods::post("os"),
             "user" => "",
             "pass" => ""
@@ -240,7 +249,7 @@ class Auth extends Controller {
      */
     public function loginas($user_id) {
         $session = Registry::get("session");
-        $session->set("admin_user_id", $user_id);
+        $session->set("admin_user_id", $this->user->id);
         $this->setUser(false);
         $user = User::first(array("id = ?" => $user_id));
         $this->authorize($user);

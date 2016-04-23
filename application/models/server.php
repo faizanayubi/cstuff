@@ -11,6 +11,7 @@ class Server extends \Shared\Model {
      * @readwrite
      * @type integer
      * @index
+     * @validate required, numeric
      */
     protected $_user_id;
 
@@ -19,6 +20,7 @@ class Server extends \Shared\Model {
      * @readwrite
      * @type integer
      * @index
+     * @validate required, numeric
      */
     protected $_item_id;
 
@@ -27,6 +29,7 @@ class Server extends \Shared\Model {
      * @readwrite
      * @type integer
      * @index
+     * @validate required, numeric
      */
     protected $_service_id;
 

@@ -10,10 +10,7 @@
                             <a class="list-group-item active text-center">
                                 <i class="fa fa-line-chart"></i> Management
                             </a>
-                            <a href="/member/all" class="list-group-item"><i class="fa fa-users fa-2x"></i>  Users <span class="badge">{echo Shared\Markup::nice_number(Models\User::count())}</span></a>
-                            <a href="/detector/approve" class="list-group-item"><i class="fa fa-tasks fa-2x"></i>  Triggers <span class="badge"></span></a>
-                            <a href="/platform/all" class="list-group-item"><i class="fa fa-globe fa-2x"></i>  Websites <span class="badge"></span></a>
-                            <a href="/fakereferer/all" class="list-group-item"><i class="fa fa-link fa-2x"></i>  FakeReferer <span class="badge"></span></a>
+                            <a href="/users/manage" class="list-group-item"><i class="fa fa-users fa-2x"></i>  Users <span class="badge">{echo Shared\Markup::nice_number(Models\User::count())}</span></a>
                         </div>
                     </div>
 
@@ -35,9 +32,7 @@
                                 <i class="fa fa-pie-chart"></i> Monitor
                             </a>
                             <a href="/admin/search?model=action&amp;key=live&amp;sign=equal&amp;value=1" class="list-group-item"><i class="fa fa-asterisk fa-2x"></i>  Actions <span class="badge"></span></a>
-                            <a href="/admin/search?model=user&amp;key=live&amp;sign=equal&amp;value=1" class="list-group-item"><i class="fa fa-user-secret fa-2x"></i>  Admins <span class="badge"></span></a>
-                            <a href="/admin/search?model=newsletter&amp;key=live&amp;sign=equal&amp;value=1" class="list-group-item"><i class="fa fa-newspaper-o fa-2x"></i>  Newsletter <span class="badge">{}</span></a>
-                            <a href="/marketing/managePackage.html" class="list-group-item"><i class="fa fa-archive fa-2x"></i>  Packages <span class="badge">{}</span></a>
+                            <a href="/admin/search?model=user&amp;key=admin&amp;sign=equal&amp;value=1" class="list-group-item"><i class="fa fa-user-secret fa-2x"></i>  Admins <span class="badge"></span></a>
                         </div>
                     </div>                    
 

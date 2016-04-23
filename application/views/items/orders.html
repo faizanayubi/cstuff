@@ -1,11 +1,18 @@
+{include client/modals/allot_server_ip.html}
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row">
-        	<h2 class="text-center page-heading">Manage Orders</h2>
+        	<h2 class="text-center page-header">Manage Orders</h2>
         </div>
-
+        {if isset($message)}
+        <div class="alert alert-success alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            {echo $message}
+        </div>
+        {/if}
         <div class="row">
         	<div class="col-lg-12">
+                <p class="text-center">Total Results: {echo $count}</p>
         		<div class="table-responsive">
         			<table class="table table-striped text-center table-hover table-bordered">
                         <thead>
@@ -14,6 +21,7 @@
                                 <th>Item ID</th>
                                 <th>Service Price</th>
                                 <th>Service Type</th>
+                                <th>Service Info</th>
                                 <th>User ID</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -21,12 +29,29 @@
                         </thead>
                         <tbody>
                             {foreach $o in $orders}
-                            {script $service = Models\Service::first(["id = ?" => $o->service_id], ["item_id", "price", "type"])}
+                            {script $service = Models\Service::first(["id = ?" => $o->service_id], ["item_id", "id", "price", "type"])}
                             <tr>
                             	<td># {echo $o->id}</td>
                             	<td><a href="/admin/info/item/{echo $service->item_id}">{echo $service->item_id}</a></td>
                                 <td>{echo Shared\Markup::nice_number($service->price, ["currency" => "inr"])}</td>
                                 <td>{echo $service->type}</td>
+                                {if strtolower($service->type) == "server"}
+                                    {script $server = Models\Server::first(["service_id = ?" => $service->id])}
+                                {/if} {else}
+                                    {script $server = false}
+                                {/else}
+                                <td>
+                                    {if $server}
+                                        {if $server->ips}
+                                        {script $ips = json_decode($server->ips, true)}
+                                        <span class="label label-info">{echo implode(", ", $ips)}</span>
+                                        {/if} {else}
+                                        <span class="label label-warning">IP Not Alloted</span>
+                                        {/else}
+                                    {/if} {else}
+                                    <span class="label label-default">New Service type</span>
+                                    {/else}
+                                </td>
                             	<td><a href="/admin/info/user/{echo $o->user_id}">{echo $o->user_id}</a></td>
                             	<td>
                             		{if $o->live}
@@ -38,6 +63,9 @@
                             	<td>
                             		<a href="/items/update/{echo $o->id}/{echo (string)((int) (!$o->live))}" class="btn-xs btn btn-primary"><i class="fa fa-floppy-o"></i> Change Status</a>
                             		<a href="/admin/update/order/{echo $o->id}" class="btn-xs btn btn-info"><i class="fa fa-edit"></i> Edit</a>
+                                    {if $server && !$server->ips}
+                                    <a href="#" class="addIP btn-xs btn btn-default" data-serverid="{echo $server->id}"><i class="fa fa-edit"></i> Allot IP</a>
+                                    {/if}
                             	</td>
                             </tr>
                             {/foreach}

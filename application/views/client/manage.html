@@ -33,6 +33,8 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
+                                <th>Status</th>
+                                <th>Created</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -44,7 +46,16 @@
                                 <td>{echo $u->email}</td>
                                 <td>{echo $u->phone}</td>
                                 <td>
+                                    {if $u->live == 0}
+                                    <span class="label label-warning">Suspended</span>
+                                    {/if} {else}
+                                    <span class="label label-success">Active</span>
+                                    {/else}
+                                </td>
+                                <td>{echo Framework\StringMethods::only_date($u->created)}</td>
+                                <td>
                                     <a href="/admin/update/user/{echo $u->id}" class="btn-xs btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
+                                    <a href="/auth/loginas/{echo $u->id}" class="btn-xs btn btn-default"><i class="fa fa-sign-in"></i> Login As</a>
                                 </td>
                             </tr>
                             {/foreach}

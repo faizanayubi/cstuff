@@ -195,6 +195,13 @@ $(document).ready(function () {
             }
         });
     });
+
+    $('.addIP').on('click', function (e) {
+        e.preventDefault();
+        var self = $(this);
+        $('#serverID').val(self.data('serverid'));
+        $('#allotServerIP').modal('show');
+    });
 });
 
 function toArray(object) {
