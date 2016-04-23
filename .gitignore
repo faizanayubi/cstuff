@@ -7,3 +7,6 @@ application/configuration/payment.ini
 
 # logs
 logs/
+
+# config-files
+sftp-config.json

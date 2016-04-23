@@ -222,7 +222,7 @@ class Auth extends Controller {
                 "value" => uniqid()
             ));
             $meta->save();
-            $this->notify(array(
+            Shared\Services\Mail::notify(array(
                 "template" => "forgotPassword",
                 "subject" => "New Password Requested",
                 "user" => $exist,

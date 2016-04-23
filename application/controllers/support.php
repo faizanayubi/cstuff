@@ -74,7 +74,7 @@ class Support extends Client {
             ));
             if ($conversation->validate()) {
                 $conversation->save();
-                $this->notify(array(
+                Shared\Services\Mail::notify(array(
                     "template" => "blank",
                     "subject" => $ticket->subject,
                     "message" => strip_tags($conversation->message),

@@ -86,7 +86,7 @@ class Home extends Auth {
                     ));
                     $organization->save();
 
-                    $this->notify(array(
+                    Shared\Services\Mail::notify(array(
                         "template" => "newAccount",
                         "subject" => "Your Account Information",
                         "user" => $user,
@@ -130,7 +130,7 @@ class Home extends Auth {
 
                 $user = Models\User::first(array("id = ?" => $instamojo->user_id));
 
-                $this->notify(array(
+                Shared\Services\Mail::notify(array(
                     "template" => "paidInvoice",
                     "subject" => "Invoice Paid",
                     "user" => $user,
