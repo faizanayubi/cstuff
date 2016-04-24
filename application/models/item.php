@@ -23,7 +23,7 @@ class Item extends \Shared\Model {
      * @length 255
      *
      * @validate required
-     * @label plan
+     * @label Plan
      */
     protected $_plan;
 
@@ -34,7 +34,7 @@ class Item extends \Shared\Model {
      * @length 255
      * 
      * @validate required
-     * @label processor
+     * @label Processor
      */
     protected $_processor;
 
@@ -45,7 +45,7 @@ class Item extends \Shared\Model {
      * @length 255
      *
      * @validate required
-     * @label server ram
+     * @label RAM
      */
     protected $_ram;
 
@@ -56,7 +56,7 @@ class Item extends \Shared\Model {
      * @length 255
      *
      * @validate required
-     * @label hard disk
+     * @label Hard Disk
      */
     protected $_disk;
 
@@ -67,7 +67,7 @@ class Item extends \Shared\Model {
      * @length 255
      *
      * @validate required
-     * @label bandwidth
+     * @label Bandwidth
      */
     protected $_bandwidth;
 
@@ -78,7 +78,7 @@ class Item extends \Shared\Model {
      * @length 255
      *
      * @validate required
-     * @label ips
+     * @label IPS
      */
     protected $_ips;
 
@@ -89,7 +89,7 @@ class Item extends \Shared\Model {
      * @length 10,2
      *
      * @validate required
-     * @label price
+     * @label Price
      */
     protected $_price;
 }

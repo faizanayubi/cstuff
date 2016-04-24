@@ -39,7 +39,7 @@ class Server extends \Shared\Model {
      * @type text
      * @length 255
      *
-     * @label operating system
+     * @label Operating System
      */
     protected $_os;
 
@@ -49,7 +49,7 @@ class Server extends \Shared\Model {
      * @type text
      * @length 255
      *
-     * @label server login user
+     * @label Login User
      */
     protected $_user;
 
@@ -59,7 +59,7 @@ class Server extends \Shared\Model {
      * @type text
      * @length 255
      *
-     * @label server login pass
+     * @label User Password
      */
     protected $_pass;
 

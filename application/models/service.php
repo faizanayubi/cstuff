@@ -19,15 +19,6 @@ class Service extends \Shared\Model {
      * @column
      * @readwrite
      * @type integer
-     * @index
-     * @label Item ID
-     */
-    protected $_item_id;
-
-    /**
-     * @column
-     * @readwrite
-     * @type integer
      *
      * @validate required
      * @label Billing Period

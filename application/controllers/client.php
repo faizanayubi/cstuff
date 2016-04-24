@@ -182,6 +182,37 @@ class Client extends Auth {
         ]);
     }
 
+    /**
+     * @before _secure
+     */
+    public function server($server_id) {
+        $server = Models\Server::first(["id = ?" => $server_id]);
+        if (!$server || $server->user_id != $this->user->id) {
+            $this->redirect("/404");
+        }
+
+        $this->seo(["title" => "Your Server Info"]);
+        $view = $this->getActionView();
+
+        $item = Models\Item::first(["id = ?" => $server->item_id]);
+
+        if (RequestMethods::post("action") == "updateLogin") {
+            try {
+                $server->user = RequestMethods::post("user", "", "^[a-z_][a-z0-9_-]+$");
+                $server->pass = RequestMethods::post("pass", "", "^[a-zA-Z0-9_!@#\$]+$");
+
+                $server->save();
+                $view->set("message", "Updated Login");
+            } catch (\Exception $e) {
+                $view->set("message", "Failed to update the server login");
+            }
+            
+        }
+        $view->set("server", $server)
+            ->set("fields", $server->render())
+            ->set("item", $item);
+    }
+
     protected function _addService($is_admin) {
         if ($is_admin === false) return [];
 

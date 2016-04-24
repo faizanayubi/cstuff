@@ -19,7 +19,14 @@ tinymce.init({
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row col-lg-12">
-            <h1>Create Support Ticket</h1>
+            <div class="paget-title">
+                <h2 class="page-header text-center">Create Support Ticket</h2>
+                <ol class="breadcrumb">
+                    <li><a href="/client">Home</a></li>
+                    <li><a href="/support/tickets">Support Tickets</a></li>
+                    <li class="active">Create</li>
+                </ol>
+            </div>
         </div>
 
         <div class="row">
@@ -67,6 +74,7 @@ tinymce.init({
                                 <div class="col-sm-offset-2 col-sm-10">
                                     <input type="hidden" name="action" value="ticket">
                                     <button type="submit" class="btn btn-primary">Submit</button>
+                                    <a href="/support/tickets" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
                                 </div>
                             </div>
                         </form>

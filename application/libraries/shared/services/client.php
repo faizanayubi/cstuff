@@ -25,17 +25,18 @@ class Client {
      */
 	public static function services($user) {
 		$services = \Models\Service::all(["user_id = ?" => $user->id]);
-        $items = \Models\Item::all([], ["plan", "id"]);
-        $servers = self::servers($user, "service_id", ["ips", "id", "service_id"]);
+        $servers = self::servers($user, "service_id", ["id", "service_id"]);
 
         $results = [];
         foreach ($services as $s) {
-            $item = $items[$s->item_id];
-            $server = $servers[$s->id];
+            if (strtolower($s->type) == "server") {
+                $server_id = $servers[$s->id]->id;
+            } else {
+                $server_id = null;
+            }
             $results[$s->id] = ArrayMethods::toObject([
                 "id" => $s->id,
-                "name" => $item->plan,
-                "ips" => $server->ips,
+                "server_id" => $server_id,
                 "type" => $s->type,
                 "price" => $s->price,
                 "period" => $s->period,

@@ -2,8 +2,13 @@
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row">
-            <h1 class="page-header text-center">Services</h1>
-
+            <div class="paget-title">
+                <h2 class="page-header text-center">Services</h2>
+                <ol class="breadcrumb">
+                    <li><a href="/client">Home</a></li>
+                    <li class="active">Services</li>
+                </ol>
+            </div>
             {if isset($message)}
             <div class="alert alert-info alert-dismissible fade in" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -15,9 +20,7 @@
                     <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Name</th>
                             <th>Type</th>
-                            <th>IP</th>
                             <th>Price</th>
                             <th>Next Renewal</th>
                             <th>Status</th>
@@ -27,14 +30,8 @@
                         {foreach $s in $services}
                         	<tr>
                         		<td>#{echo $s->id}</td>
-                        		<td>{echo $s->name}</td>
-                        		<td>{echo $s->type}</td>
                         		<td>
-                                {if $s->ips}
-                                    {echo implode(",", json_decode($s->ips))}
-                                {/if} {else}
-                                <span class="label label-primary"> In Process</span>
-                                {/else}
+                                    {echo $s->type}
                                 </td>
                         		<td>{echo $s->price}</td>
                         		<td>{echo Framework\StringMethods::only_date($s->renewal)}</td>
@@ -44,6 +41,10 @@
                         		{/if} {else}
                         		<span class="label label-warning"> Completed</span>
                         		{/else}
+
+                                {if $s->server_id !== null}
+                                <a href="/client/server/{echo $s->server_id}" class="btn-xs btn btn-info"><i class="fa fa-server"></i> Server Info</a>
+                                {/if}
                         		</td>
                         	</tr>
                         {/foreach}

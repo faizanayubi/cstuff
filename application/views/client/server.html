@@ -1,0 +1,50 @@
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="content">
+                    <div class="page-title">
+                        <h2 class="page-header text-center">Server Info</h2>
+                        <ol class="breadcrumb">
+                            <li><a href="/client">Home</a></li>
+                            <li><a href="/client/services">Services</a></li>
+                            <li class="active">Server Info</li>
+                        </ol>
+                    </div>
+                    {if isset($message)}
+                    <div class="alert alert-info alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        {echo $message}
+                    </div>
+                    {/if}
+                    <form action="" method="post" class="form">
+                        <div class="row">
+                            <h3>Purchase Details</h3>
+                            {script $details = $item->render()}
+                            {foreach $f in $details}
+                            <div class="form-group col-sm-6">
+                                <label for="{echo $f['placeholder']}">{echo $f['placeholder']}</label>
+                                <input disabled="" class="form-control" {echo $f['required']} {echo $f['pattern']} value="{echo $item->$f['name']}">
+                            </div>
+                            {/foreach}
+                        </div>
+
+                        <div class="well">
+                            <h3>OS</h3>
+                            {foreach $f in $fields}
+                            <div class="form-group">
+                                <label for="{echo $f['placeholder']}">{echo $f['placeholder']}</label>
+                                <input type="{echo $f['type']}" name="{echo $f['name']}" class="form-control" {echo $f['required']} {echo $f['pattern']} value="{echo $server->$f['name']}" {if $f['name'] == "os" || $f['name'] == "ips"}disabled=""{/if}>
+                            </div>
+                            {/foreach}
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-send"></i> Update</button>
+                        <a href="/client/services" class="btn btn-danger"><i class="fa fa-times"></i> Cancel</a>
+                        <input type="hidden" name="action" value="updateLogin">
+                    </form>
+                </div><br><br>
+                <!-- /.content -->
+            </div>
+        </div>
+    </div>
+</div>

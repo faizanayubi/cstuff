@@ -18,7 +18,6 @@
                         <thead>
                             <tr>
                                 <th># ID</th>
-                                <th>Item ID</th>
                                 <th>Service Price</th>
                                 <th>Service Type</th>
                                 <th>Service Info</th>
@@ -29,10 +28,9 @@
                         </thead>
                         <tbody>
                             {foreach $o in $orders}
-                            {script $service = Models\Service::first(["id = ?" => $o->service_id], ["item_id", "id", "price", "type"])}
+                            {script $service = Models\Service::first(["id = ?" => $o->service_id], ["id", "price", "type"])}
                             <tr>
                             	<td># {echo $o->id}</td>
-                            	<td><a href="/admin/info/item/{echo $service->item_id}">{echo $service->item_id}</a></td>
                                 <td>{echo Shared\Markup::nice_number($service->price, ["currency" => "inr"])}</td>
                                 <td>{echo $service->type}</td>
                                 {if strtolower($service->type) == "server"}
