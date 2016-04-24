@@ -254,4 +254,43 @@ class Auth extends Controller {
         $user = User::first(array("id = ?" => $user_id));
         $this->authorize($user);
     }
+
+    /**
+     * @before _secure
+     */
+    public function authenticate() {
+        $this->willRenderLayoutView = false;
+        $view = $this->getActionView(); $session = Registry::get("session");
+        $redirect = $session->get('Authenticate:$redirect');
+        if (!$redirect) {
+            $this->redirect("/404");
+        }
+
+        $tries_key = 'Auth\SudoMode:$tries';
+        $tries = $session->get($tries_key, 1);
+
+        $proceed = false;
+        if (!isset($_COOKIE['sudo_mode']) && RequestMethods::post("action") == "verify") {
+            $password = RequestMethods::post("password");
+            if ($tries >= 3) {
+                $session->erase($tries_key);
+                $this->redirect("/auth/logout");
+            }
+
+            if (sha1($password) == $this->user->password) {
+                setcookie('sudo_mode', 'enabled', time() + 60 * 30);
+                $session->set('Authenticate:$done', true);
+                $proceed = true;
+            } else {
+                $session->set($tries_key, ++$tries);
+                $view->set("error", "Authentication failed");
+            }
+        } elseif ($_COOKIE['sudo_mode'] == 'enabled') {
+            $proceed = true;
+        }
+
+        if ($proceed) {
+            $this->redirect($redirect);
+        }
+    }
 }

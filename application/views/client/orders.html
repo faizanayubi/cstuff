@@ -14,7 +14,7 @@
                     <thead>
                         <tr>
                             <th>Service Id</th>
-                            <th>Service Name</th>
+                            <th>Service Type</th>
                             <th>Updated</th>
                             <th>Cost</th>
                             <th>Status</th>
@@ -24,7 +24,7 @@
                         {foreach $o in $orders}
                         	<tr>
                         		<td>#{echo $o->service_id}</td>
-                        		<td>{echo $o->name}</td>
+                        		<td>{echo $o->type}</td>
                         		<td>{echo Framework\StringMethods::only_date($o->updated)}</td>
                         		<td><i class="fa fa-inr"></i> {echo $o->price}</td>
                         		<td>

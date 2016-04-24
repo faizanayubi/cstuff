@@ -53,19 +53,20 @@ class Client {
      */
     public static function orders($user) {
         $orders = \Models\Order::all(["user_id = ?" => $user->id], ["id", "service_id", "modified", "live"]);
-        $services = self::services($user);
+        $services = \Models\Service::all(["user_id = ?" => $user->id], ["id", "type", "price"]);
 
         $results = [];
         foreach ($orders as $o) {
             $s = $services[$o->service_id];
-            unset($s->id); unset($s->live);
             $d = [
                 "id" => $o->id,
                 "live" => $o->live,
+                "type" => $s->type,
                 "service_id" => $o->service_id,
-                "updated" => $o->modified
+                "updated" => $o->modified,
+                "price" => $s->price
             ];
-            $results[$o->id] = (object) array_merge($d, (array) $s);
+            $results[$o->id] = (object) $d;
         }
         return $results;
     }
