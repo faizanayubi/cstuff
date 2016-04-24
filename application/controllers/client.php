@@ -58,10 +58,15 @@ class Client extends Auth {
      */
     public function services() {
     	$this->seo(array("title" => "Services"));
-        $view = $this->getActionView();
+        $view = $this->getActionView(); $session = Registry::get("session");
 
+        $is_admin = (boolean) $session->get("admin_user_id");
+        $message = $this->_addService($is_admin);
+
+        $view->set($message);
         $services = ClientService::services($this->user);
-        $view->set("services", $services);
+        $view->set("services", $services)
+            ->set("is_admin", $is_admin);
     }
 
     /**
@@ -175,5 +180,50 @@ class Client extends Auth {
             "property" => $property,
             "val" => $val
         ]);
+    }
+
+    protected function _addService($is_admin) {
+        if ($is_admin === false) return [];
+
+        $service = new Models\Service();
+        $fields = $service->render();
+
+        if (RequestMethods::post("action") == "addService") {
+            foreach ($fields as $key => $value) {
+                $service->$key = RequestMethods::post($key);
+            }
+            $service->user_id = $this->user->id;
+
+            $type = strtolower($service->type);
+            $valid = ($type == "server" && !$service->item_id) ? false : true;
+            if ($service->validate() && $valid) {
+                $service->save();
+
+                $order = new Models\Order([
+                    "user_id" => $this->user->id,
+                    "service_id" => $service->id
+                ]);
+                $order->save();
+
+                if ($type == "server") {
+                    $server = Models\Server::saveRecord(null, [
+                        "item_id" => $service->item_id,
+                        "user_id" => $this->user->id,
+                        "service_id" => $service->id
+                    ]);
+                }
+                return [
+                    "fields" => $fields,
+                    "message" => "Service Added Successfully!!"
+                ];
+            } else {
+                return [
+                    "message" => "Please Fill the required fields",
+                    "fields" => $fields
+                ];
+            }
+        } else {
+            return ["fields" => $fields];
+        }
     }
 }

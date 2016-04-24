@@ -11,6 +11,7 @@ class Service extends \Shared\Model {
      * @readwrite
      * @type integer
      * @index
+     * @validate required
      */
     protected $_user_id;
 
@@ -19,6 +20,7 @@ class Service extends \Shared\Model {
      * @readwrite
      * @type integer
      * @index
+     * @label Item ID
      */
     protected $_item_id;
 
@@ -28,7 +30,7 @@ class Service extends \Shared\Model {
      * @type integer
      *
      * @validate required
-     * @label billing period
+     * @label Billing Period
      */
     protected $_period;
 
@@ -39,7 +41,7 @@ class Service extends \Shared\Model {
      * @length 10,2
      *
      * @validate required
-     * @label price
+     * @label Price
      */
     protected $_price;
 
@@ -50,7 +52,7 @@ class Service extends \Shared\Model {
      * @length 255
      *
      * @validate required
-     * @label type
+     * @label Type
      */
     protected $_type;
 
@@ -61,7 +63,7 @@ class Service extends \Shared\Model {
      * @type date
      *
      * @validate required
-     * @label next renewal
+     * @label Next Renewal
      */
     protected $_renewal;
 }

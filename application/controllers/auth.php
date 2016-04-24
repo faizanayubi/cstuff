@@ -67,6 +67,7 @@ class Auth extends Controller {
             $this->redirect("/");
         } else {
             $user = User::first(["id = ?" => $admin]);
+            $session->erase("admin_user_id");
             $this->authorize($user);
         }
     }

@@ -74,4 +74,21 @@ class Server extends \Shared\Model {
      */
     protected $_ips;
 
+    public static function saveRecord($record = null, $opts = []) {
+        if (!$record) {
+            $record = new self([
+                "user_id" => $opts["user_id"],
+                "item_id" => $opts["item_id"],
+                "service_id" => $opts["service_id"],
+                "os" => $opts["os"]
+            ]);
+        }
+
+        $record->user = (isset($opts["user"])) ? $opts["user"] : "";
+        $record->pass = (isset($opts["pass"])) ? $opts["pass"] : "";
+        $record->ips = (isset($opts["ips"])) ? $opts["ips"] : "";
+
+        $record->save();
+        return $record;
+    }
 }

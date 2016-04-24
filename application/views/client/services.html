@@ -1,8 +1,15 @@
+{include client/modals/addService.html}
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row">
-            <h1>Services</h1>
+            <h1 class="page-header text-center">Services</h1>
 
+            {if isset($message)}
+            <div class="alert alert-info alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                {echo $message}
+            </div>
+            {/if}
             <div class="table-responsive">
                 <table class="table table-striped text-center table-hover table-bordered">
                     <thead>
@@ -43,6 +50,12 @@
                     </tbody>
                 </table>
             </div>
+
+            {if $is_admin}
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addService">
+                <i class="fa fa-plus"></i> New Service
+            </button>
+            {/if}
         </div>
     </div>
 </div>
