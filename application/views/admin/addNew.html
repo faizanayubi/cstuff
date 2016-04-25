@@ -1,0 +1,42 @@
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row col-lg-12">
+            <h1 class="page-header text-center">{echo ucfirst($model)}</h1>
+            {if isset($success)}
+            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                {echo $success}
+            </div>
+            {/if}
+            <form class="form-inline text-center" role="form" method="get" action="">
+                <p>Change Model</p>
+                <div class="form-group">
+                    <div class="input-group">
+                        {script $models = Shared\Markup::models()}
+                        {script asort($models)}
+                        <select name="model" class="form-control" value="{echo $model}">
+                            {foreach $m in $models}
+                            <option value="{echo $m}">{echo ucfirst($m)}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Go</button>
+            </form><br>
+            <div class="col-md-offset-1 col-lg-8">
+                <form class="form-horizontal" method="post" action="">
+                    {foreach $f in $fields}
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">{echo $f['name']}</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="{echo $f['name']}" class="form-control" value="">
+                        </div>
+                    </div>
+                    {/foreach}
+                    <input type="hidden" name="action" value="create">
+                    <button type="submit" class="btn btn-success pull-right">Save <i class="fa fa-check-circle fa-fw"></i></button>
+                </form>
+            </div><br><br>
+        </div>
+    </div>
+</div>

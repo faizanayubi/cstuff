@@ -202,6 +202,22 @@ $(document).ready(function () {
         $('#serverID').val(self.data('serverid'));
         $('#allotServerIP').modal('show');
     });
+
+    $('.delete').click(function(e) {
+        e.preventDefault();
+        var self = $(this), message = '';
+
+        if (self.data('message')) {
+            message += self.data('message');
+        } else {
+            message += 'Are you sure, you want to proceed with the action?!';
+        }
+        bootbox.confirm(message, function(result) {
+            if (result) {
+                window.location.href = self.attr('href');
+            }
+        });
+    });
 });
 
 function toArray(object) {

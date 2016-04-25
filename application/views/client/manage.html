@@ -56,6 +56,7 @@
                                 <td>
                                     <a href="/admin/update/user/{echo $u->id}" class="btn-xs btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
                                     <a href="/auth/loginas/{echo $u->id}" class="btn-xs btn btn-default"><i class="fa fa-sign-in"></i> Login As</a>
+                                    <a href="/admin/deleteUser/{echo $u->id}" class="delete btn btn-xs btn-danger" data-message="Carefully This will remove the data for the user completely!!"><i class="fa fa-trash"></i> Delete Data</a>
                                 </td>
                             </tr>
                             {/foreach}

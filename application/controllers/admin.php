@@ -275,6 +275,66 @@ class Admin extends Auth {
         ]);
     }
 
+    /**
+     * @before _admin
+     */
+    public function addNew($model) {
+        $db = RequestMethods::get("model");
+        if ($db) {
+            $this->redirect("/admin/addNew/$db");
+        }
+        $this->seo(array("title" => "Add new $model"));
+        $view = $this->getActionView();
+
+        $view->set("model", $model);
+        $model = 'Models\\' . $model;
+
+        $model = new $model();
+        $fields = $model->getColumns();
+        if (RequestMethods::post("action") == "create") {
+            foreach ($fields as $key => $value) {
+                $model->$key = RequestMethods::post($key);
+            }
+
+            $model->save();
+            $view->set("success", $view->get("model") . " Was added successfully!!");
+        }
+        $view->set("fields", $fields);
+    }
+
+    /**
+     * @before _admin
+     */
+    public function deleteUser($user_id) {
+        $session = Registry::get("session");
+        $authorized = $session->get('Authenticate:$done');
+
+        $this->noview();
+        $session->set('Authenticate:$redirect', "/admin/deleteUser/$user_id");
+        if (!$authorized) {
+            $this->redirect("/auth/authenticate");
+        }
+
+        $user = Models\User::first(["id = ?" => $user_id]);
+        if (!$user || $user->id == $this->user->id) {
+            $this->redirect("/404");
+        }
+
+        $models = Shared\Markup::models();
+        foreach ($models as $m) {
+            $m = "Models\\" . $m;
+
+            $klass = new $m();
+            if (property_exists($klass, "_user_id")) {
+                $find = $m::all(["user_id = ?" => $user->id]);
+                foreach ($find as $r) {
+                    // $r->delete();
+                }
+            }
+        }
+        $this->redirect("/admin");
+    }
+
     protected function install() {
         $this->noview();
         $models = Shared\Markup::models();
