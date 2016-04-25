@@ -1,7 +1,40 @@
 <div id="page-wrapper">
     <div class="container-fluid">
-        <div class="row">
-            <h1>Main Page</h1>
+        <div class="row"><br>
+            <div class="panel panel-primary">
+            	<div class="panel-heading">
+            		My Information
+            		<span class="pull-right">{echo $organization->name}</span>
+            	</div>
+            	<div class="table-responsive">
+            		<table class="table">
+            			<tr>
+            				<td>
+            					<b>Name:</b> {echo $user->name}<br>
+            					<b>Email:</b> {echo $user->email}<br>
+            					<b>Phone:</b> {echo $user->phone}
+            				</td>
+            				<td>
+            					<b>Address:</b><br>
+            					{echo $organization->address}<br>
+            					{echo $organization->city}, {echo $organization->postalcode}
+            				</td>
+            			</tr>
+            		</table>
+            	</div>
+            </div>
+
+            <div class="panel panel-primary">
+            	<div class="panel-heading">Open Support Tickets</div>
+            </div>
+
+            <div class="panel panel-primary">
+            	<div class="panel-heading">Recent Invoices</div>
+            </div>
+
+            <div class="panel panel-primary">
+            	<div class="panel-heading">Recent Services</div>
+            </div>
         </div>
     </div>
 </div>
