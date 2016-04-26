@@ -44,6 +44,11 @@ $routes = array(
         "action" => "products"
     ),
     array(
+        "pattern" => "termsofservice",
+        "controller" => "home",
+        "action" => "termsofservice"
+    ),
+    array(
         "pattern" => "login",
         "controller" => "auth",
         "action" => "login"

@@ -166,4 +166,8 @@ class Home extends Auth {
         }
     }
 
+    public function termsofservice() {
+        $this->seo(array("title" => "Terms of Service", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+    }
 }
