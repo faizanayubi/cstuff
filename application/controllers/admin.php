@@ -259,25 +259,6 @@ class Admin extends Auth {
     /**
      * @before _admin
      */
-    public function leads() {
-        $this->seo(array("title" => "Leads", "keywords" => "admin", "description" => "admin"));
-        $view = $this->getActionView();
-        $page = RequestMethods::get("page", 1);
-        $limit = RequestMethods::get("limit", 10);
-
-        $leads = Models\Lead::all([], ["*"], "created", "desc", $limit, $page);
-        $count = Models\Lead::count();
-        $view->set([
-            "leads" => $leads,
-            "page" => $page,
-            "limit" => $limit,
-            "count" => $count
-        ]);
-    }
-
-    /**
-     * @before _admin
-     */
     public function addNew($model) {
         $db = RequestMethods::get("model");
         if ($db) {

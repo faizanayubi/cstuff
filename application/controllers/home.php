@@ -14,17 +14,6 @@ class Home extends Auth {
     	$view = $this->getActionView();
 
         if (RequestMethods::post("action") == "lead") {
-            $lead = Models\Lead::first(["email = ?" => $email]);
-            if (!$lead) {
-                $lead = new Models\Lead([
-                    "name" => RequestMethods::post("name"),
-                    "email" => $email,
-                    "phone" => RequestMethods::post("phone")
-                ]);
-                if ($lead->validate()) {
-                    $lead->save();
-                }
-            }
             $view->set("message", "Your Query has been submitted");
         }
 

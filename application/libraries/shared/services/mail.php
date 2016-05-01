@@ -56,13 +56,13 @@ class Mail {
             'subject' => $options["subject"],
             'text'    => $body
         ));
-        self::log(implode(",", $emails));
+        self::log(print_r($emails, true));
     }
 
     protected static function log($message = "") {
         $logfile = APP_PATH . "/logs/" . date("Y-m-d") . ".txt";
         $timestamp = strftime("%Y-%m-%d %H:%M:%S", time());
-        $content = "[{$timestamp}] {$message}";
+        $content = "[{$timestamp}] {$message}\n";
         file_put_contents($logfile, $content, FILE_APPEND);
     }
 }

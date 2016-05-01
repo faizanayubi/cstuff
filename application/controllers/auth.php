@@ -168,7 +168,6 @@ class Auth extends Controller {
                 $this->redirect("/client");
             } else {
                 $view->set("message", 'Invalid email/password');
-                return;
             }
         }
     }
