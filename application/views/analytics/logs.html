@@ -8,7 +8,10 @@
                     {$message}
                 </div>
             {/if}
-            <h4 class="page-heading">Total Size: <strong>{echo $size}</strong></h4>
+            <p>
+                <a href="/analytics/logs/removeAll" class="btn btn-primary pull-right delete" data-message="This will delete all the logs!! Are you sure you want to proceed?">Delete All</a>
+                <span class="page-heading">Total Size: <strong>{echo $size}</strong></span>
+            </p>
             <div class="panel panel-default">
                 <table class="table">
                     <thead>

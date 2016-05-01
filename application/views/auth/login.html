@@ -31,7 +31,7 @@
                             <div class="form">
                                 <form action="" method="post" class="contact-form text-center" role="form">
                                     {if isset($message)}
-                                    <h6 class="error">
+                                    <h6 class="error" style="color: red; display: block;">
                                     <span class="colored-text icon_error-circle_alt"></span> {echo $message}</h6>
                                     {/if}
                                     <input type="email" name="email" class="form-control" placeholder="Your Email">

@@ -19,6 +19,11 @@ class Analytics extends \Auth {
 		$this->seo(array("title" => "Activity Logs", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
 
+        if ($action == "removeAll") {
+            exec("rm " . APP_PATH . "/logs/*");
+            $this->redirect("/analytics/logs");
+        }
+
         $name = RequestMethods::get("file");
         if ($action == "unlink" && $name) {
             $file = APP_PATH ."/logs/". $name;
