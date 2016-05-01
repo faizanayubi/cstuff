@@ -1,5 +1,6 @@
 <?php
 use Framework\RequestMethods as RequestMethods;
+use Framework\Registry as Registry;
 
 class Analytics extends \Auth {
 	/**

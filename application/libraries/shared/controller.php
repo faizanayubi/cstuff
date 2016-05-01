@@ -101,7 +101,7 @@ class Controller extends \Framework\Controller {
         $mongoDB = Registry::get("MongoDB");
         if (!$mongoDB) {
             $mongo = new \MongoClient();
-            $mongoDB = $mongo->selectDB("stats");
+            $mongoDB = $mongo->selectDB("cstuff");
             Registry::set("MongoDB", $mongoDB);
         }
 
