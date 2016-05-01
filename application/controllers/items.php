@@ -1,6 +1,6 @@
 <?php
 
-use \WebBot\lib\WebBot\Bot as Bot;
+use WebBot\Core\Bot as Bot;
 use Framework\RequestMethods as RequestMethods;
 
 /**
@@ -24,6 +24,7 @@ class Items extends \Auth {
 		$this->noview();
 
 		$this->log("Items cron started");
+		Bot::$logging = false;
 		$bot = new Bot([
 			'cloud' => 'https://www.wholesaleinternet.net/dedicated/'
 		]);

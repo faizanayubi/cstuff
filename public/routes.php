@@ -57,6 +57,11 @@ $routes = array(
         "pattern" => "users/manage",
         "controller" => "client",
         "action" => "manage"
+    ),
+    array(
+        "pattern" => "logout",
+        "controller" => "auth",
+        "action" => "logout"
     )
 );
 
