@@ -62,7 +62,7 @@ class Mail {
     protected static function log($message = "") {
         $logfile = APP_PATH . "/logs/" . date("Y-m-d") . ".txt";
         $timestamp = strftime("%Y-%m-%d %H:%M:%S", time());
-        $content = "[{$timestamp}] {$message}\n";
+        $content = "[{$timestamp}] {$message}" . PHP_EOL;
         file_put_contents($logfile, $content, FILE_APPEND);
     }
 }

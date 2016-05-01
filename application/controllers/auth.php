@@ -179,7 +179,7 @@ class Auth extends Controller {
         $this->seo(array("title" => "Forgot Password"));
         $view = $this->getActionView();
 
-        if (RequestMethods::post("action") == "reset" && $this->reCaptcha()) {
+        if (RequestMethods::post("action") == "reset") {
             $message = $this->_resetPassword();
             $view->set("message", $message);
         }
@@ -192,14 +192,14 @@ class Auth extends Controller {
         $this->seo(array("title" => "Forgot Password"));
         $view = $this->getActionView();
 
-        $meta = Meta::first(array("value = ?" => $token, "property = ?" => "resetpass"));
+        $meta = Models\Meta::first(array("value = ?" => $token, "property = ?" => "resetpass"));
         if (!isset($meta)) {
             $this->redirect("/index.html");
         }
 
         if (RequestMethods::post("action") == "change" && $this->reCaptcha()) {
             $user = User::first(array("id = ?" => $meta->user_id));
-            if(RequestMethods::post("password") == RequestMethods::post("cpassword")) {
+            if (RequestMethods::post("password") == RequestMethods::post("cpassword")) {
                 $user->password = sha1(RequestMethods::post("password"));
                 $user->save();
                 $meta->delete();
@@ -217,14 +217,19 @@ class Auth extends Controller {
         if ($organization) {
             $this->setUser($user);
             $session->set("organization", $organization);
-            $this->redirect("/client/index.html");
+
+            if ($this->user->admin) {
+                $this->redirect("/admin");
+            } else {
+                $this->redirect("/client/index.html");
+            }
         }
     }
 
     protected function _resetPassword() {
         $exist = User::first(array("email = ?" => RequestMethods::post("email")), array("id", "email", "name"));
         if ($exist) {
-            $meta = new Meta(array(
+            $meta = new Models\Meta(array(
                 "user_id" => $exist->id,
                 "property" => "resetpass",
                 "value" => uniqid()
