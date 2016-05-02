@@ -92,29 +92,25 @@ class Auth extends Controller {
         ));
         $server->save();
 
-        $invoice = new Models\Invoice(array(
-            "user_id" => $user->id,
-            "amount" => $item->price,
-            "duedate" => strftime("%Y-%m-%d", strtotime('now')),
-            "ref" => ""
-        ));
-        $invoice->save();
-
-        $bill = new Models\Bill(array(
-            "user_id" => $user->id,
-            "item_id" => $item->id,
-            "invoice_id" => $invoice->id
-        ));
-        $bill->save();
-
         $order = new Models\Order(array(
             "user_id" => $user->id,
             "service_id" => $service->id
         ));
         $order->save();
+
+        $invoice = new Models\Invoice(array(
+            "user_id" => $user->id,
+            "amount" => $item->price,
+            "duedate" => strftime("%Y-%m-%d", strtotime('now')),
+            "ref" => "",
+            "order_id" => $order->id
+        ));
+        $invoice->save();
+
+        return $order;
     }
 
-    protected function _pay($user, $item) {
+    protected function _pay($user, $item, $order) {
         $configuration = Registry::get("configuration");
         $imojo = $configuration->parse("configuration/payment");
         $curl = new Curl();
@@ -138,7 +134,8 @@ class Auth extends Controller {
                 "amount" => $payment->payment_request->amount,
                 "status" => $payment->payment_request->status,
                 "longurl" => $payment->payment_request->longurl,
-                "live" => 0
+                "live" => 0,
+                "order_id" => $order->id
             ));
             $instamojo->save();
             return $instamojo->longurl;

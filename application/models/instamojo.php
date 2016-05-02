@@ -45,4 +45,11 @@ class Instamojo extends \Shared\Model {
      */
     protected $_longurl;
     
+    /**
+     * @column
+     * @readwrite
+     * @type integer
+     * @index
+     */
+    protected $_order_id;
 }

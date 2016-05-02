@@ -174,7 +174,14 @@ class Items extends \Auth {
 			if (!$server) {
 				$view->set("message", "Invalid Server id");
 			} else {
+				$service = Models\Service::first(["id = ?" => $server->service_id]);
+				$service->live = 1;
+				$service->save();
+
+				$server->user = RequestMethods::post("user");
+				$server->pass = RequestMethods::post("pass");
 				$server->ips = $ips;
+				$server->live = 1;
 				$server->save();
 				$view->set("message", "IP Alloted Successfully!!");
 			}

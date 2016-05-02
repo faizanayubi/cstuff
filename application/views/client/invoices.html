@@ -8,6 +8,18 @@
                     <li class="active">Invoices</li>
                 </ol>
             </div>
+            <form class="form-inline text-center" role="form" method="get" action="">
+                <div class="form-group">
+                    <label for="Status">Status</label>
+                    <div class="input-group">
+                        <select name="status" class="form-control">
+                            <option value="paid">Paid</option>
+                            <option value="unpaid">Unpaid</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Go</button>
+            </form><br>
             <div class="table-responsive">
                 <table class="table table-striped text-center table-hover table-bordered">
                     <thead>
@@ -16,6 +28,7 @@
                             <th>Invoice Date</th>
                             <th>Due Date</th>
                             <th>Amount</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -25,6 +38,13 @@
                             <td>{echo Framework\StringMethods::only_date($i->created)}</td>
                             <td>{echo Framework\StringMethods::only_date($i->duedate)}</td>
                             <td><i class="fa fa-inr"></i> {echo $i->amount}</td>
+                            <td>
+                                {if $i->live == 1}
+                                <span class="label label-success">Paid</span>
+                                {/if} {else}
+                                <span class="label label-warning">Not Paid</span>
+                                {/else}
+                            </td>
                         </tr>
                         {/foreach}
                     </tbody>

@@ -83,8 +83,8 @@ class Home extends Auth {
                         "organization" => $organization
                     ));
                 }
-                $this->_server($user, $item);
-                $url = $this->_pay($user, $item);
+                $order = $this->_server($user, $item);
+                $url = $this->_pay($user, $item, $order);
                 $this->redirect($url);
             } else {
                 $organization = Models\Organization::first(array("user_id = ?" => $user->id));
@@ -102,6 +102,8 @@ class Home extends Auth {
 
         if ($payment_request_id) {
             $instamojo = Models\Instamojo::first(array("payment_request_id = ?" => $payment_request_id));
+            $order = Models\Order::first(array("id = ?" => $instamojo->order_id));
+            $invoice = Models\Invoice::first(array("order_id = ?" => $order->id));
 
             if ($instamojo) {
                 $imojo = $configuration->parse("configuration/payment");
@@ -115,7 +117,10 @@ class Home extends Auth {
                 if ($instamojo->status == "Completed") {
                     $instamojo->live = 1;
                 }
-                $instamojo->save();
+                $instamojo->save(); // since amount is paid update order and invoice
+
+                $order->live = 1; $invoice->live = 1;
+                $order->save(); $order->save();
 
                 $user = Models\User::first(array("id = ?" => $instamojo->user_id));
 

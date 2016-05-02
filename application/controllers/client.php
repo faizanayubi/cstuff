@@ -127,7 +127,22 @@ class Client extends Auth {
     	$this->seo(array("title" => "Invoices"));
         $view = $this->getActionView();
 
-        $invoices = Models\Invoice::all(["user_id = ?" => $this->user->id]);
+        $status = RequestMethods::get("status" , "paid");
+        switch ($status) {
+            case 'paid':
+                $live = true;
+                break;
+
+            case 'unpaid':
+                $live = false;
+                break;
+            
+            default:
+                $live = true;
+                break;
+        }
+
+        $invoices = Models\Invoice::all(["user_id = ?" => $this->user->id, "live = ?" => $live]);
         $view->set("invoices", $invoices);
     }
 

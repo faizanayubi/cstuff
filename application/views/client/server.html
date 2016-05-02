@@ -34,7 +34,7 @@
                             {foreach $f in $fields}
                             <div class="form-group">
                                 <label for="{echo $f['placeholder']}">{echo $f['placeholder']}</label>
-                                <input type="{echo $f['type']}" name="{echo $f['name']}" class="form-control" {echo $f['required']} {echo $f['pattern']} value="{echo $server->$f['name']}" {if $f['name'] == "os" || $f['name'] == "ips"}disabled=""{/if}>
+                                <input type="{echo $f['type']}" name="{echo $f['name']}" class="form-control" {echo $f['required']} {echo $f['pattern']} value="{echo $server->$f['name']}" disabled="">
                             </div>
                             {/foreach}
                         </div>

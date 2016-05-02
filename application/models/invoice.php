@@ -36,10 +36,8 @@ class Invoice extends \Shared\Model {
     /**
      * @column
      * @readwrite
-     * @type text
-     * @length 255
-     *
-     * @label reference of paid
+     * @type integer
+     * @index
      */
-    protected $_ref;
+    protected $_order_id;
 }
