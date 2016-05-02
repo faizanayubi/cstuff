@@ -34,7 +34,7 @@
                     <tbody>
                         {foreach $i in $invoices}
                         <tr>
-                            <td>{echo $i->id}</td>
+                            <td><a href="/invoices/{echo $i->id}">{echo $i->id}</a></td>
                             <td>{echo Framework\StringMethods::only_date($i->created)}</td>
                             <td>{echo Framework\StringMethods::only_date($i->duedate)}</td>
                             <td><i class="fa fa-inr"></i> {echo $i->amount}</td>

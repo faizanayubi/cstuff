@@ -62,6 +62,11 @@ $routes = array(
         "pattern" => "logout",
         "controller" => "auth",
         "action" => "logout"
+    ),
+    array(
+        "pattern" => "invoices/:id",
+        "controller" => "client",
+        "action" => "invoice"
     )
 );
 

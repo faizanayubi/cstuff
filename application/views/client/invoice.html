@@ -1,0 +1,37 @@
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="page-title">
+                <h2 class="page-header text-center">Invoice</h2>
+                <ol class="breadcrumb">
+                    <li><a href="/client">Home</a></li>
+                    <li><a href="/client/invoices">Invoices</a></li>
+                    <li class="active">Invoice - {echo $invoice->id}</li>
+                </ol>
+            </div>
+            COMPANY + user info
+            <div class="table-responsive">
+                <table class="table table-striped text-center table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Invoice #</th>
+                            <th>Item</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Invoice Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{echo $invoice->id}</td>
+                            <td>{echo $invoice->item}</td>
+                            <td>{echo $invoice->description}</td>
+                            <td>{echo $invoice->price}</td>
+                            <td>{echo $invoice->date}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

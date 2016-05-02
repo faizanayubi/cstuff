@@ -71,6 +71,35 @@ class Client {
         return $results;
     }
 
+    /**
+     * Find invoice data
+     */
+    public static function invoice($invoice) {
+        $order = \Models\Order::first(["id = ?" => $invoice->order_id]);
+        $service = \Models\Service::first(["id = ?" => $order->service_id]);
+
+        if (strtolower($service->type) ==  "server") {
+            // find server info
+            $server = \Models\Server::first(["service_id = ?" => $service->id], ["item_id"]);
+            $item = \Models\Item::first(["id = ?" => $server->item_id], ["id", "plan"]);
+
+            $i = ['item' => $item->id, 'description' => $item->plan];
+        } else {
+            $i = ['item' => 0, 'description' => $service->type];
+        }
+
+        $result = [
+            'id' => $invoice->id,
+            'description' => $i['description'],
+            'item' => $i['item'],
+            'price' => $service->price,
+            'total' => $service->price,
+            'paid' => $invoice->amount,
+            'date' => $invoice->created
+        ];
+        return ArrayMethods::toObject($result);
+    }
+
 	protected static function _orderBy($objects, $field) {
 		$results = [];
 

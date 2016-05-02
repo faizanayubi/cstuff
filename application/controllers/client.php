@@ -228,6 +228,22 @@ class Client extends Auth {
             ->set("item", $item);
     }
 
+    /**
+     * @before _secure
+     */
+    public function invoice($invoice_id) {
+        $invoice = Models\Invoice::first(["id = ?" => $invoice_id]);
+        if (!$invoice) {
+            $this->redirect("/404");
+        }
+
+        $this->seo(["title" => "View Invoice"]);
+        $view = $this->getActionView();
+
+        $result = Shared\Services\Client::invoice($invoice);
+        $view->set("invoice", $result);
+    }
+
     protected function _addService($is_admin) {
         if ($is_admin === false) return [];
 
