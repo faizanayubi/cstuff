@@ -21,6 +21,7 @@
                                 <th>Service Price</th>
                                 <th>Service Type</th>
                                 <th>Service Info</th>
+                                <th>Service Status</th>
                                 <th>User ID</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -28,7 +29,7 @@
                         </thead>
                         <tbody>
                             {foreach $o in $orders}
-                            {script $service = Models\Service::first(["id = ?" => $o->service_id], ["id", "price", "type"])}
+                            {script $service = Models\Service::first(["id = ?" => $o->service_id], ["id", "price", "type", "live"])}
                             <tr>
                             	<td># {echo $o->id}</td>
                                 <td>{echo Shared\Markup::nice_number($service->price, ["currency" => "inr"])}</td>
@@ -47,7 +48,14 @@
                                         <span class="label label-warning">IP Not Alloted</span>
                                         {/else}
                                     {/if} {else}
-                                    <span class="label label-default">New Service type</span>
+                                    <span class="label label-default">{echo $service->type}</span>
+                                    {/else}
+                                </td>
+                                <td>
+                                    {if $service->live}
+                                    <span class="label label-violet">Active</span>
+                                    {/if} {else}
+                                    <span class="label label-danger">Expired</span>
                                     {/else}
                                 </td>
                             	<td><a href="/admin/info/user/{echo $o->user_id}">{echo $o->user_id}</a></td>

@@ -37,9 +37,9 @@
                         		<td>{echo Framework\StringMethods::only_date($s->renewal)}</td>
                         		<td>
                         		{if $s->live}
-                        		<span class="label label-success"> Completed</span>
+                        		<span class="label label-success"> Active</span>
                         		{/if} {else}
-                        		<span class="label label-warning"> Completed</span>
+                        		<span class="label label-danger"> Expired</span>
                         		{/else}
 
                                 {if $s->server_id !== null}

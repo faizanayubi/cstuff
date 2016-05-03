@@ -102,36 +102,37 @@ class Home extends Auth {
 
         if ($payment_request_id) {
             $instamojo = Models\Instamojo::first(array("payment_request_id = ?" => $payment_request_id));
-            $order = Models\Order::first(array("id = ?" => $instamojo->order_id));
-            $invoice = Models\Invoice::first(array("order_id = ?" => $order->id));
 
-            if ($instamojo) {
-                $imojo = $configuration->parse("configuration/payment");
-                $curl = new Curl();
-                $curl->setHeader('X-Api-Key', $imojo->payment->instamojo->key);
-                $curl->setHeader('X-Auth-Token', $imojo->payment->instamojo->auth);
-                $curl->get('https://www.instamojo.com/api/1.1/payment-requests/'.$payment_request_id.'/');
-                $payment = $curl->response;
+            if (!$instamojo) return;
 
-                $instamojo->status = $payment->payment_request->status;
-                if ($instamojo->status == "Completed") {
-                    $instamojo->live = 1;
-                }
-                $instamojo->save(); // since amount is paid update order and invoice
+            $imojo = $configuration->parse("configuration/payment");
+            $curl = new Curl();
+            $curl->setHeader('X-Api-Key', $imojo->payment->instamojo->key);
+            $curl->setHeader('X-Auth-Token', $imojo->payment->instamojo->auth);
+            $curl->get('https://www.instamojo.com/api/1.1/payment-requests/'.$payment_request_id.'/');
+            $payment = $curl->response;
 
-                $order->live = 1; $invoice->live = 1;
-                $order->save(); $order->save();
+            $instamojo->status = $payment->payment_request->status;
+            if ($instamojo->status == "Completed") {
+                $instamojo->live = 1;
 
-                $user = Models\User::first(array("id = ?" => $instamojo->user_id));
+                $order = Models\Order::first(array("id = ?" => $instamojo->order_id));
+                $invoice = Models\Invoice::first(array("order_id = ?" => $order->id));
+                $service = Models\Service::first(array("id = ?" => $order->service_id));
 
-                Shared\Services\Mail::notify(array(
-                    "template" => "paidInvoice",
-                    "subject" => "Invoice Paid",
-                    "user" => $user,
-                    "instamojo" => $instamojo
-                ));
+                $order->live = 1; $invoice->live = 1; $service->live = 1;
+                $order->save(); $order->save(); $service->save();
             }
+            $instamojo->save(); // since amount is paid update order and invoice
 
+            $user = Models\User::first(array("id = ?" => $instamojo->user_id));
+
+            Shared\Services\Mail::notify(array(
+                "template" => "paidInvoice",
+                "subject" => "Invoice Paid",
+                "user" => $user,
+                "instamojo" => $instamojo
+            ));
         }
     }
 
