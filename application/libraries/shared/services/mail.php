@@ -13,6 +13,11 @@ class Mail {
 	 */
 	protected static $_conf = array();
 
+    /**
+     * Mail account
+     */
+    protected static $_account = null;
+
 	/**
      * The Main Method to return MailGun Instance
      * 
@@ -24,10 +29,11 @@ class Mail {
     	}
 
         $configuration = Registry::get("configuration");
-        $parsed = $configuration->parse("configuration/mail");
-        if (!empty($parsed->mail->mailgun) && !empty($parsed->mail->mailgun->key)) {
-            $mg = new \Mailgun\Mailgun($parsed->mail->mailgun->key);
+        $mail = $configuration->parse("configuration/mail")->mail;
+        if (!empty($mail->mailgun) && !empty($mail->mailgun->key)) {
+            $mg = new \Mailgun\Mailgun($mail->mailgun->key);
             self::$_conf['mailgun'] = $mg;
+            self::$_account = $mail->mailgun->account;
         }
         
         return self::$_conf['mailgun'];
@@ -51,7 +57,7 @@ class Mail {
         $emails = isset($options["emails"]) ? $options["emails"] : array($options["user"]->email);
         $mailgun = self::_mailgun();
         $mailgun->sendMessage("cloudstuff.tech", array(
-            'from'    => 'Hemant Mann <hemant@cloudstuff.tech>',
+            'from'    => 'Cloudstuff Support <'. self::$_account . '>',
             'to'      => $emails,
             'subject' => $options["subject"],
             'text'    => $body
