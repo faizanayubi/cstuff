@@ -39,6 +39,11 @@ class Home extends Auth {
         $view = $this->getActionView();
     }
 
+    public function freevps() {
+        $this->seo(array("title" => "Free VPS for Lifetime"));
+        $view = $this->getActionView();
+    }
+
     public function cart($item_id) {
 		$this->seo(array("title" => "Cart"));
 		$view = $this->getActionView();
