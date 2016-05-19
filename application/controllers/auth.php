@@ -88,7 +88,8 @@ class Auth extends Controller {
             "service_id" => $service->id,
             "os" => RequestMethods::post("os"),
             "user" => "",
-            "pass" => ""
+            "pass" => "",
+            "ips" => ""
         ));
         $server->save();
 
@@ -102,7 +103,6 @@ class Auth extends Controller {
             "user_id" => $user->id,
             "amount" => $item->price,
             "duedate" => strftime("%Y-%m-%d", strtotime('now')),
-            "ref" => "",
             "order_id" => $order->id
         ));
         $invoice->save();
