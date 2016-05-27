@@ -92,4 +92,12 @@ class Item extends \Shared\Model {
      * @label Price
      */
     protected $_price;
+
+    /**
+     * @column
+     * @readwrite
+     * @type boolean
+     * @index
+     */
+    protected $_autoupdate = true;
 }

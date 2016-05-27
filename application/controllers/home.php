@@ -80,13 +80,13 @@ class Home extends Auth {
                     ));
                     $organization->save();
 
-                    /*Shared\Services\Mail::notify(array(
+                    Shared\Services\Mail::notify(array(
                         "template" => "newAccount",
                         "subject" => "Your Account Information",
                         "user" => $user,
                         "pass" => $pass,
                         "organization" => $organization
-                    ));*/
+                    ));
                 }
                 $order = $this->_server($user, $item);
                 $url = $this->_pay($user, $item, $order);

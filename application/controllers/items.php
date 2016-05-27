@@ -54,6 +54,7 @@ class Items extends \Auth {
 					$item->price = $result['price'];
 					$item->ips = $result['ips'];
 					$item->bandwidth = $result['bandwidth'];
+					$item->autoupdate = true;
 				}
 				$item->live = (($result['live'])) ? $result['live'] : '0';
 				$item->save();
