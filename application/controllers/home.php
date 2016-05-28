@@ -39,14 +39,9 @@ class Home extends Auth {
         $view = $this->getActionView();
     }
 
-    public function freevps() {
-        $this->seo(array("title" => "Free VPS for Lifetime"));
-        $view = $this->getActionView();
-    }
-
     public function cart($item_id) {
 		$this->seo(array("title" => "Cart"));
-		$view = $this->getActionView();
+		$view = $this->getActionView();$session = Registry::get("session");
 
         $item = Models\Item::first(array("live = ?" => true, "id = ?" => $item_id));
         if (!$item) {
@@ -79,8 +74,10 @@ class Home extends Auth {
                         "country" => RequestMethods::post("country")
                     ));
                     $organization->save();
+                    $this->setUser($user);
+                    $session->set("organization", $org);
 
-                    Shared\Services\Mail::notify(array(
+                    $this->notify(array(
                         "template" => "newAccount",
                         "subject" => "Your Account Information",
                         "user" => $user,
@@ -88,13 +85,14 @@ class Home extends Auth {
                         "organization" => $organization
                     ));
                 }
-                $order = $this->_server($user, $item);
-                $url = $this->_pay($user, $item, $order);
-                $this->redirect($url);
-            } else {
-                $organization = Models\Organization::first(array("user_id = ?" => $user->id));
             }
-
+            $order = $this->_server($user, $item);
+            if ($item->price) {
+                $url = $this->_pay($user, $item, $order);
+            } else {
+                $url = "/success.html";
+            }
+            $this->redirect($url);
         }
         $view->set("item", $item);
     }
@@ -132,7 +130,7 @@ class Home extends Auth {
 
             $user = Models\User::first(array("id = ?" => $instamojo->user_id));
 
-            Shared\Services\Mail::notify(array(
+            $this->notify(array(
                 "template" => "paidInvoice",
                 "subject" => "Invoice Paid",
                 "user" => $user,
@@ -168,6 +166,11 @@ class Home extends Auth {
 
     public function termsofservice() {
         $this->seo(array("title" => "Terms of Service", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+    }
+
+    public function notfound() {
+        $this->seo(array("title" => "Not Found", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
     }
 }

@@ -91,6 +91,41 @@ class Controller extends \Framework\Controller {
         return FALSE;
     }
 
+    protected function sendgrid() {
+        $configuration = Registry::get("configuration");
+        $parsed = $configuration->parse("configuration/mail");
+        $sendgrid = new \SendGrid\SendGrid($parsed->mail->sendgrid->key);
+        
+        return $sendgrid;
+    }
+
+    protected function getBody($options) {
+        $template = $options["template"];
+        $view = new \Framework\View(array(
+            "file" => APP_PATH . "/application/views/layouts/email/{$template}.html"
+        ));
+        foreach ($options as $key => $value) {
+            $view->set($key, $value);
+        }
+
+        return $view->render();
+    }
+    
+    protected function notify($options) {
+        $body = $this->getBody($options);
+        $emails = isset($options["email"]) ? array($options["email"]) : array($options["user"]->email);
+        $sendgrid = $this->sendgrid();
+        $email = new \SendGrid\Email();
+        $email
+            ->addTo($emails)
+            ->setFrom('CloudStuff <'. $parsed->mail->mailgun->account .'>')
+            ->setSubject($options["subject"])
+            ->setText($body)
+        ;
+        $sendgrid->send($email);
+        $this->log(implode(",", $emails));
+    }
+
     public function __construct($options = array()) {
         parent::__construct($options);
 

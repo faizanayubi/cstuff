@@ -23,7 +23,7 @@ class Mail {
      * 
      * @return object \MailGun\MailGun Instance
      */
-    protected static function _mailGun() {
+    protected static function _mailgun() {
     	if (isset(self::$_conf['mailgun'])) {
     		return self::$_conf['mailgun'];
     	}
@@ -57,7 +57,7 @@ class Mail {
         $emails = isset($options["emails"]) ? $options["emails"] : array($options["user"]->email);
         $mailgun = self::_mailgun();
         $mailgun->sendMessage("cloudstuff.tech", array(
-            'from'    => 'Cloudstuff Support <'. self::$_account . '>',
+            'from'    => 'CloudStuff <'. self::$_account . '>',
             'to'      => $emails,
             'subject' => $options["subject"],
             'text'    => $body

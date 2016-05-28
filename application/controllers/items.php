@@ -61,8 +61,10 @@ class Items extends \Auth {
 			}
 		}
 		foreach ($original_items as $i) {
-			$i->live = false;
-			$i->save();
+			if ($i->autoupdate) {
+				$i->live = false;
+				$i->save();
+			}
 		}
 		$this->log("Items cron ended");
 	}

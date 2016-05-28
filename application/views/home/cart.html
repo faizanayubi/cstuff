@@ -38,6 +38,7 @@
                                             <option value="Ubuntu 14.04 LTS" selected="SELECTED">Ubuntu 14.04 LTS</option>
                                             <option value="Ubuntu 15.04">Ubuntu 15.04</option>
                                         </select>
+                                        {if(!$user)}
                                         <input type="text" name="name" placeholder="Your Name" required="">
                                         <input type="email" name="email" placeholder="Your Email" required="">
                                         <input type="text" name="phone" placeholder="Your phone" required="">
@@ -48,6 +49,7 @@
                                         <input type="text" name="address" placeholder="Street Address" required="">
                                         <input type="text" name="city" placeholder="City" required="">
                                         <input type="text" name="postalcode" placeholder="Postal Code" required="">
+                                        {/if}
                                         <input type="hidden" name="action" value="cart">
                                     </div>
                                 </div>

@@ -9,6 +9,11 @@ $routes = array(
         "action" => "features"
     ),
     array(
+        "pattern" => "404",
+        "controller" => "home",
+        "action" => "notfound"
+    ),
+    array(
         "pattern" => "cart/:id",
         "controller" => "home",
         "action" => "cart"
