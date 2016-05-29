@@ -118,12 +118,11 @@ class Controller extends \Framework\Controller {
         $email = new \SendGrid\Email();
         $email
             ->addTo($emails)
-            ->setFrom('CloudStuff <'. $parsed->mail->mailgun->account .'>')
+            ->setFrom('CloudStuff <info@cloudstuff.tech>')
             ->setSubject($options["subject"])
             ->setText($body)
         ;
         $sendgrid->send($email);
-        $this->log(implode(",", $emails));
     }
 
     public function __construct($options = array()) {

@@ -40,7 +40,7 @@ class Home extends Auth {
     }
 
     public function cart($item_id) {
-		$this->seo(array("title" => "Cart"));
+		$this->seo(array("title" => "Cart"));$user = $this->user;
 		$view = $this->getActionView();$session = Registry::get("session");
 
         $item = Models\Item::first(array("live = ?" => true, "id = ?" => $item_id));
@@ -49,7 +49,6 @@ class Home extends Auth {
         }
 
         if (RequestMethods::post("action") == "cart") {
-            $user = $this->user;
             if (!$user) {
                 $exist = Models\User::first(array("email = ?" => RequestMethods::post("email")));
                 if ($exist) {
@@ -75,7 +74,7 @@ class Home extends Auth {
                     ));
                     $organization->save();
                     $this->setUser($user);
-                    $session->set("organization", $org);
+                    $session->set("organization", $organization);
 
                     $this->notify(array(
                         "template" => "newAccount",
@@ -95,6 +94,7 @@ class Home extends Auth {
             $this->redirect($url);
         }
         $view->set("item", $item);
+        $view->set("user", $user);
     }
 
     public function success() {
