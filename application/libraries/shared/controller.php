@@ -91,6 +91,20 @@ class Controller extends \Framework\Controller {
         return FALSE;
     }
 
+    protected function mautic() {
+        $configuration = Registry::get("configuration");
+        $parsed = $configuration->parse("configuration/mail");
+
+        $settings = array(
+            'baseUrl'          => '',
+            'version'          => 'OAuth2',
+            'clientKey'        => '',
+            'clientSecret'     => '',
+            'callback'         => ''
+        );
+
+    }
+
     protected function sendgrid() {
         $configuration = Registry::get("configuration");
         $parsed = $configuration->parse("configuration/mail");
