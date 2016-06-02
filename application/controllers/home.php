@@ -40,13 +40,12 @@ class Home extends Auth {
     }
 
     public function cart($item_id) {
-		$this->seo(array("title" => "Cart"));$user = $this->user;
-		$view = $this->getActionView();$session = Registry::get("session");
-
         $item = Models\Item::first(array("live = ?" => true, "id = ?" => $item_id));
         if (!$item) {
             $this->redirect("/index.html");
         }
+		$this->seo(array("title" => "Buy ".$item->plan));$user = $this->user;
+		$view = $this->getActionView();$session = Registry::get("session");
 
         if (RequestMethods::post("action") == "cart") {
             if (!$user) {

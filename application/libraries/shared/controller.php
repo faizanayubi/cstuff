@@ -102,7 +102,6 @@ class Controller extends \Framework\Controller {
             'clientSecret'     => '',
             'callback'         => ''
         );
-
     }
 
     protected function sendgrid() {
