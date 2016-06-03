@@ -19,7 +19,7 @@ namespace Framework {
             // do nothing
         }
 
-        private static function _test($regex, $value) {
+        private static function _test($regex, $value, $key) {
             if ($regex) {
                 $test = preg_match("/{$regex}/", $value);
             } else {
@@ -29,13 +29,13 @@ namespace Framework {
             if ($test) {
                 return $value;
             } else {
-                throw new \Exception("Invalid Request for the $key");   
+                throw new \Exception("Invalid Input for the $key");   
             }
         }
         
         public static function get($key, $default = "", $regex = false) {
             if (!empty($_GET[$key])) {
-                return self::_test($regex, $_GET[$key]);
+                return self::_test($regex, $_GET[$key], $key);
             }
 
             return $default;
@@ -43,7 +43,7 @@ namespace Framework {
 
         public static function post($key, $default = "", $regex = false) {
             if (!empty($_POST[$key])) {
-                return self::_test($regex, $_POST[$key]);
+                return self::_test($regex, $_POST[$key], $key);
             } return $default;
         }
 

@@ -84,10 +84,11 @@ class Home extends Auth {
                     ));
                 }
             }
-            $order = $this->_server($user, $item);
-            if ($item->price) {
+            if ((int) $item->price != 0) {
+                $order = $this->_server($user, $item);
                 $url = $this->_pay($user, $item, $order);
             } else {
+                $order = $this->_server($user, $item, ['orderType' => 'free']);
                 $url = "/success.html";
             }
             $this->redirect($url);

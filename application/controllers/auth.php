@@ -72,7 +72,12 @@ class Auth extends Controller {
         }
     }
 
-    protected function _server($user, $item) {
+    protected function _server($user, $item, $opts = []) {
+        if (!empty($opts) && $opts['orderType'] == 'free') {
+            $free = true;
+        } else {
+            $free = false;
+        }
         $service = new Models\Service(array(
             "user_id" => $user->id,
             "period" => 30,
@@ -80,6 +85,7 @@ class Auth extends Controller {
             "type" => "SERVER",
             "renewal" => strftime("%Y-%m-%d", strtotime('+30 day'))
         ));
+        if ($free) $service->live = true;
         $service->save();
 
         $server = new Models\Server(array(
@@ -91,12 +97,14 @@ class Auth extends Controller {
             "pass" => "",
             "ips" => ""
         ));
+        if ($free) $server->live = true;
         $server->save();
 
         $order = new Models\Order(array(
             "user_id" => $user->id,
             "service_id" => $service->id
         ));
+        if ($free) $order->live = true;
         $order->save();
 
         $invoice = new Models\Invoice(array(
@@ -105,6 +113,7 @@ class Auth extends Controller {
             "duedate" => strftime("%Y-%m-%d", strtotime('now')),
             "order_id" => $order->id
         ));
+        if ($free) $invoice->live = true;
         $invoice->save();
 
         return $order;
@@ -140,6 +149,7 @@ class Auth extends Controller {
             $instamojo->save();
             return $instamojo->longurl;
         }
+        return "/";
     }
 
     /**
