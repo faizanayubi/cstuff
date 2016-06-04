@@ -173,4 +173,9 @@ class Home extends Auth {
         $this->seo(array("title" => "Not Found", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
     }
+
+    public function clients() {
+        $this->seo(array("title" => "Our Clients", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+    }
 }
