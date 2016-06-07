@@ -19,6 +19,8 @@
                             <tr>
                                 <th># ID</th>
                                 <th>Service Price</th>
+                                <th>Service ID</th>
+                                <th>Invoice ID</th>
                                 <th>Service Type</th>
                                 <th>Service Info</th>
                                 <th>Service Status</th>
@@ -30,9 +32,12 @@
                         <tbody>
                             {foreach $o in $orders}
                             {script $service = Models\Service::first(["id = ?" => $o->service_id], ["id", "price", "type", "live"])}
+                            {script $invoice = Models\Invoice::first(["order_id = ?" => $o->id, "user_id = ?" => $o->user_id])}
                             <tr>
                             	<td># {echo $o->id}</td>
                                 <td>{echo Shared\Markup::nice_number($service->price, ["currency" => "inr"])}</td>
+                                <td><a href="/admin/update/service/{echo $service->id}">{echo $service->id}</a></td>
+                                <td><a href="/admin/update/invoice/{echo $invoice->id}">{echo $invoice->id}</a></td>
                                 <td>{echo $service->type}</td>
                                 {if strtolower($service->type) == "server"}
                                     {script $server = Models\Server::first(["service_id = ?" => $service->id])}
@@ -67,7 +72,7 @@
                             		{/else}
                             	</td>
                             	<td>
-                            		<a href="/items/update/{echo $o->id}/{echo (string)((int) (!$o->live))}" class="btn-xs btn btn-primary"><i class="fa fa-floppy-o"></i> Change Status</a>
+                            		<a href="/admin/edit/order/{echo $o->id}/live/{echo (string)((int) (!$o->live))}" class="btn-xs btn btn-primary"><i class="fa fa-floppy-o"></i> Change Status</a>
                             		<a href="/admin/update/order/{echo $o->id}" class="btn-xs btn btn-info"><i class="fa fa-edit"></i> Edit</a>
                                     {if $server && !$server->ips}
                                     <a href="#" class="addIP btn-xs btn btn-default" data-serverid="{echo $server->id}"><i class="fa fa-edit"></i> Allot IP</a>

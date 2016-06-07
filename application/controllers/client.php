@@ -244,6 +244,34 @@ class Client extends Auth {
         $view->set("invoice", $result);
     }
 
+    /**
+     * @before _secure
+     */
+    public function changePassword() {
+        $this->noview();
+
+        $session = Registry::get("session");
+        $authorized = $session->get('Authenticate:$done');
+
+        $meta = Models\Meta::first(["user_id = ?" => $this->user->id]);
+        if (!$meta) {
+            $meta = new Models\Meta(array(
+                "user_id" => $this->user->id,
+                "property" => "resetpass",
+                "value" => uniqid()
+            ));
+            $meta->save();   
+        }
+        $redirect = "/auth/resetpassword/". $meta->value;
+        $session->set('Authenticate:$redirect', $redirect);
+
+        if (!$authorized) {
+            $this->redirect("/auth/authenticate");
+        } else {
+            $this->redirect($redirect);
+        }
+    }
+
     protected function _addService($is_admin) {
         if ($is_admin === false) return [];
 

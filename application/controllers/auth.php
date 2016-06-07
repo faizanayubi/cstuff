@@ -34,7 +34,9 @@ class Auth extends Controller {
      */
     public function _session() {
         $user = $this->getUser();
-        if ($user) {
+        $session = Registry::get("session");
+
+        if ($user && !$session->get('Authenticate:$redirect')) {
             $this->redirect("/client");
         }
     }
@@ -78,6 +80,7 @@ class Auth extends Controller {
         } else {
             $free = false;
         }
+        $item->price = 1.15 * ((int) $item->price);
         $service = new Models\Service(array(
             "user_id" => $user->id,
             "period" => 30,
@@ -204,7 +207,7 @@ class Auth extends Controller {
             $this->redirect("/index.html");
         }
 
-        if (RequestMethods::post("action") == "change" && $this->reCaptcha()) {
+        if (RequestMethods::post("action") == "change") {
             $user = User::first(array("id = ?" => $meta->user_id));
             if (RequestMethods::post("password") == RequestMethods::post("cpassword")) {
                 $user->password = sha1(RequestMethods::post("password"));
