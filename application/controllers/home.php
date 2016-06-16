@@ -40,7 +40,7 @@ class Home extends Auth {
     }
 
     public function cart($item_id) {
-        $item = Models\Item::first(array("live = ?" => true, "id = ?" => $item_id));
+        $item = Models\Item::first(array("id = ?" => $item_id));
         if (!$item) {
             $this->redirect("/index.html");
         }
