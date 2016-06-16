@@ -307,10 +307,7 @@ class Admin extends Auth {
 
             $klass = new $m();
             if (property_exists($klass, "_user_id")) {
-                $find = $m::all(["user_id = ?" => $user->id]);
-                foreach ($find as $r) {
-                    // $r->delete();
-                }
+                $m::deleteAll(["user_id = ?" => $user->id]);
             }
         }
         $this->redirect("/admin");
